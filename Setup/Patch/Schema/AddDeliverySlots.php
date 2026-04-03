@@ -5,7 +5,6 @@ namespace Domus\CustomerDeliveryChecker\Setup\Patch\Schema;
 
 use Magento\Framework\Setup\Patch\SchemaPatchInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\Framework\DB\Ddl\Table;
 
 class AddDeliverySlots implements SchemaPatchInterface
 {

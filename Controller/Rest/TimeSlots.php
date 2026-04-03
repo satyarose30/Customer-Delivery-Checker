@@ -135,7 +135,6 @@ class TimeSlots implements HttpGetActionInterface
             ]);
 
         } catch (\Throwable $e) {
-        } catch (\Exception $e) {
             $this->logger->error('Time slot fetch failed', ['exception' => $e]);
             return $result->setData([
                 'success' => false,
