@@ -7,6 +7,7 @@ use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Domus\CustomerDeliveryChecker\Model\ResourceModel\Pincode\CollectionFactory as PincodeCollectionFactory;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class Express
@@ -28,6 +29,11 @@ class Express implements HttpGetActionInterface
      * @var PincodeCollectionFactory
      */
     private PincodeCollectionFactory $pincodeCollectionFactory;
+    
+    /**
+     * @var LoggerInterface
+     */
+    private LoggerInterface $logger;
 
     /**
      * Express constructor.
@@ -35,15 +41,18 @@ class Express implements HttpGetActionInterface
      * @param JsonFactory $resultJsonFactory
      * @param HttpRequest $request
      * @param PincodeCollectionFactory $pincodeCollectionFactory
+     * @param LoggerInterface $logger
      */
     public function __construct(
         JsonFactory $resultJsonFactory,
         HttpRequest $request,
-        PincodeCollectionFactory $pincodeCollectionFactory
+        PincodeCollectionFactory $pincodeCollectionFactory,
+        LoggerInterface $logger
     ) {
         $this->resultJsonFactory = $resultJsonFactory;
         $this->request = $request;
         $this->pincodeCollectionFactory = $pincodeCollectionFactory;
+        $this->logger = $logger;
     }
 
     /**
@@ -56,8 +65,8 @@ class Express implements HttpGetActionInterface
         $result = $this->resultJsonFactory->create();
         
         try {
-            $pincode = $this->request->getParam('pincode');
-            $orderValue = $this->request->getParam('order_value', 0);
+            $pincode = trim((string)$this->request->getParam('pincode'));
+            $orderValue = (float)$this->request->getParam('order_value', 0);
             
             if (!$pincode) {
                 return $result->setData([
@@ -91,7 +100,8 @@ class Express implements HttpGetActionInterface
                 'express_options' => $expressOptions
             ]);
 
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
+            $this->logger->error('Express options fetch failed', ['exception' => $e]);
             return $result->setData([
                 'success' => false,
                 'message' => __('An error occurred while fetching express options')

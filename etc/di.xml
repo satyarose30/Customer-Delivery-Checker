@@ -21,6 +21,9 @@
     <preference for="Domus\CustomerDeliveryChecker\Api\Data\DeliveryScheduleInterface"
                 type="Domus\CustomerDeliveryChecker\Model\DeliverySchedule"/>
 
+    <preference for="Domus\CustomerDeliveryChecker\Api\Data\DeliveryScheduleSearchResultsInterface"
+                type="Domus\CustomerDeliveryChecker\Model\DeliveryScheduleSearchResults"/>
+
     <!-- ✅ FIXED (IMPORTANT) -->
     <preference for="Domus\CustomerDeliveryChecker\Api\Data\ETAResultInterface"
                 type="Domus\CustomerDeliveryChecker\Model\Data\ETAResult"/>
@@ -33,6 +36,9 @@
 
     <preference for="Domus\CustomerDeliveryChecker\Api\Data\TrackingResultInterface"
                 type="Domus\CustomerDeliveryChecker\Model\TrackingResult"/>
+
+    <preference for="Domus\CustomerDeliveryChecker\Api\Data\SearchResultInterface"
+                type="Domus\CustomerDeliveryChecker\Model\SearchResult"/>
 
     <!-- UI Plugin -->
     <type name="Domus\CustomerDeliveryChecker\Ui\Component\Form\DataProvider">
@@ -104,6 +110,9 @@
                 </item>
                 <item name="shiprocket" xsi:type="string">
                     Domus\CustomerDeliveryChecker\Model\Integration\Shiprocket
+                </item>
+                <item name="third_party" xsi:type="string">
+                    Domus\CustomerDeliveryChecker\Model\Integration\ThirdPartyLogistics
                 </item>
             </argument>
         </arguments>

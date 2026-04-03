@@ -10,6 +10,7 @@ use Domus\CustomerDeliveryChecker\Model\PincodeFactory;
 use Domus\CustomerDeliveryChecker\Model\ResourceModel\Pincode as PincodeResource;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Exception\LocalizedException;
+use Psr\Log\LoggerInterface;
 
 class Save extends Action
 {
@@ -18,7 +19,8 @@ class Save extends Action
     public function __construct(
         Context $context,
         private readonly PincodeFactory $pincodeFactory,
-        private readonly PincodeResource $pincodeResource
+        private readonly PincodeResource $pincodeResource,
+        private readonly LoggerInterface $logger
     ) {
         parent::__construct($context);
     }
@@ -83,8 +85,10 @@ class Save extends Action
             $this->messageManager->addSuccessMessage(__('Pincode saved successfully.'));
             return $resultRedirect->setPath('*/*/edit', ['id' => $model->getId()]);
         } catch (LocalizedException $e) {
+            $this->logger->warning('Pincode save validation failed', ['exception' => $e, 'data' => $data]);
             $this->messageManager->addErrorMessage($e->getMessage());
         } catch (\Exception $e) {
+            $this->logger->error('Unexpected pincode save error', ['exception' => $e, 'data' => $data]);
             $this->messageManager->addErrorMessage(__('Something went wrong while saving the pincode.'));
         }
 

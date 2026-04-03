@@ -1,74 +1,40 @@
 <?php
+declare(strict_types=1);
+
 namespace Domus\CustomerDeliveryChecker\Setup\Patch\Schema;
 
 use Magento\Framework\Setup\Patch\SchemaPatchInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\Framework\DB\Ddl\Table;
 
 class AddDeliverySlots implements SchemaPatchInterface
 {
-    /**
-     * @var ModuleDataSetupInterface
-     */
-    private $moduleDataSetup;
+    private ModuleDataSetupInterface $moduleDataSetup;
 
-    public function __construct(
-        ModuleDataSetupInterface $moduleDataSetup
-    ) {
+    public function __construct(ModuleDataSetupInterface $moduleDataSetup)
+    {
         $this->moduleDataSetup = $moduleDataSetup;
     }
 
-    public function apply()
+    public function apply(): void
     {
         $this->moduleDataSetup->getConnection()->startSetup();
-
-        $connection = $this->moduleDataSetup->getConnection();
-        $tableName = $this->moduleDataSetup->getTable('domus_delivery_slots');
-
-        if (!$connection->isTableExists($tableName)) {
-            $table = $connection->newTable($tableName)
-                ->addColumn(
-                    'slot_id',
-                    Table::TYPE_INTEGER,
-                    null,
-                    ['identity' => true, 'nullable' => false, 'primary' => true],
-                    'Slot ID'
-                )
-                ->addColumn(
-                    'pincode',
-                    Table::TYPE_TEXT,
-                    255,
-                    ['nullable' => false],
-                    'Pincode'
-                )
-                ->addColumn(
-                    'start_time',
-                    Table::TYPE_TEXT,
-                    50,
-                    ['nullable' => false],
-                    'Start Time'
-                )
-                ->addColumn(
-                    'end_time',
-                    Table::TYPE_TEXT,
-                    50,
-                    ['nullable' => false],
-                    'End Time'
-                )
-                ->setComment('Delivery Slots Table');
-
-            $connection->createTable($table);
-        }
+        /**
+         * Intentionally no-op.
+         *
+         * Delivery schedule table ownership now lives in declarative schema
+         * (`etc/db_schema.xml`) to avoid dual ownership/drift between
+         * imperative schema patches and declarative definitions.
+         */
 
         $this->moduleDataSetup->getConnection()->endSetup();
     }
 
-    public static function getDependencies()
+    public static function getDependencies(): array
     {
         return [];
     }
 
-    public function getAliases()
+    public function getAliases(): array
     {
         return [];
     }
