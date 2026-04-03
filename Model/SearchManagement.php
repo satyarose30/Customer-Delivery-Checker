@@ -45,4 +45,12 @@ class SearchManagement implements SearchManagementInterface
         $result->setTotalCount((int)$collection->getSize());
         return $result;
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function autocomplete($query)
+    {
+        return $this->searchPincodes($query);
+    }
 }
