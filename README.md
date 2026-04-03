@@ -90,11 +90,11 @@ Proprietary - Domus Extensions.
 ---
 
 ## 🆘 Support
-For technical support or feature requests, contact: **support@domus.com**
+For technical support or feature requests, contact:
 - All rights reserved.
 
 ---
 
 ## 🆘 Support
 
-For support, please contact: support@domus.com
+For support, please contact:
