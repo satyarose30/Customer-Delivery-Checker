@@ -12,8 +12,8 @@ use Magento\Store\Model\ScopeInterface;
 
 class CheckoutPincodeSyncObserver implements ObserverInterface
 {
-    private const XML_PATH_ENABLED = 'domus/customer_delivery_checker/general/enabled';
-    private const XML_PATH_DISPLAY_CHECKOUT = 'domus/customer_delivery_checker/general/display_on_checkout';
+    private const XML_PATH_ENABLED = 'customer_delivery_checker/general/enabled';
+    private const XML_PATH_DISPLAY_CHECKOUT = 'customer_delivery_checker/general/show_on_checkout';
 
     public function __construct(
         private readonly ScopeConfigInterface $scopeConfig,

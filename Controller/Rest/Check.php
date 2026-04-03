@@ -11,6 +11,7 @@ use Domus\CustomerDeliveryChecker\Model\ResourceModel\Pincode\CollectionFactory 
 use Domus\CustomerDeliveryChecker\Model\ResourceModel\Pincode\Collection;
 use Domus\CustomerDeliveryChecker\Model\PincodeManagement;
 use Domus\CustomerDeliveryChecker\Model\Cache\RedisPincodeCache;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class Check
@@ -47,6 +48,11 @@ class Check implements HttpGetActionInterface
      * @var RedisPincodeCache
      */
     private RedisPincodeCache $cache;
+    
+    /**
+     * @var LoggerInterface
+     */
+    private LoggerInterface $logger;
 
     /**
      * Check constructor.
@@ -57,6 +63,7 @@ class Check implements HttpGetActionInterface
      * @param HttpRequest $request
      * @param PincodeManagement $pincodeManagement
      * @param RedisPincodeCache $cache
+     * @param LoggerInterface $logger
      */
     public function __construct(
         JsonFactory $resultJsonFactory,
@@ -64,7 +71,8 @@ class Check implements HttpGetActionInterface
         PincodeCollectionFactory $pincodeCollectionFactory,
         HttpRequest $request,
         PincodeManagement $pincodeManagement,
-        RedisPincodeCache $cache
+        RedisPincodeCache $cache,
+        LoggerInterface $logger
     ) {
         $this->resultJsonFactory = $resultJsonFactory;
         $this->jsonSerializer = $jsonSerializer;
@@ -72,6 +80,7 @@ class Check implements HttpGetActionInterface
         $this->request = $request;
         $this->pincodeManagement = $pincodeManagement;
         $this->cache = $cache;
+        $this->logger = $logger;
     }
 
     /**
@@ -121,6 +130,7 @@ class Check implements HttpGetActionInterface
             return $result->setData($responseData);
             
         } catch (\Exception $e) {
+            $this->logger->error('Pincode check failed', ['exception' => $e]);
             return $result->setData([
                 'success' => false,
                 'message' => 'An error occurred while checking pincode'

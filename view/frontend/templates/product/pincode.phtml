@@ -8,7 +8,7 @@ if (!$block->isEnabled()): ?>
 <?php else: ?>
 <div class="pincode-checker" id="pincode-checker" 
      data-mage-init='{"Domus_CustomerDeliveryChecker/js/pincode-checker": {
-         "checkUrl": "<?= $block->escapeUrl($block->getUrl('customerdeliverychecker/rest/check')) ?>",
+         "checkUrl": "<?= $block->escapeUrl($block->getUrl('domus/rest/check')) ?>",
          "warrantyUrl": "<?= $block->escapeUrl($block->getWarrantyCheckUrl()) ?>",
          "productId": "<?= $block->escapeHtml($block->getCurrentProductId() ?: '') ?>",
          "apiKey": "<?= $block->escapeHtml($block->getGoogleMapsApiKey() ?: '') ?>",

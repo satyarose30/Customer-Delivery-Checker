@@ -87,9 +87,9 @@ $product = $block->getProduct();
                     "component": "Domus_CustomerDeliveryChecker/js/pincode-checker",
                     "productId": <?= $product ? (int)$product->getId() : 0 ?>,
                     "config": {
-                        "checkUrl": "<?= $block->escapeJs($block->getUrl('customerdeliverychecker/rest/check')) ?>",
-                        "timeslotsUrl": "<?= $block->escapeJs($block->getUrl('customerdeliverychecker/rest/timeslots')) ?>",
-                        "expressUrl": "<?= $block->escapeJs($block->getUrl('customerdeliverychecker/rest/express')) ?>"
+                        "checkUrl": "<?= $block->escapeJs($block->getUrl('domus/rest/check')) ?>",
+                        "timeslotsUrl": "<?= $block->escapeJs($block->getUrl('domus/rest/timeslots')) ?>",
+                        "expressUrl": "<?= $block->escapeJs($block->getUrl('domus/rest/express')) ?>"
                     }
                 }
             }
