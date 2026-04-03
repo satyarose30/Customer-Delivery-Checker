@@ -34,6 +34,9 @@
     <preference for="Domus\CustomerDeliveryChecker\Api\Data\TrackingResultInterface"
                 type="Domus\CustomerDeliveryChecker\Model\TrackingResult"/>
 
+    <preference for="Domus\CustomerDeliveryChecker\Api\Data\SearchResultInterface"
+                type="Domus\CustomerDeliveryChecker\Model\SearchResult"/>
+
     <!-- UI Plugin -->
     <type name="Domus\CustomerDeliveryChecker\Ui\Component\Form\DataProvider">
         <plugin name="domus_customerdeliverychecker_form_data"

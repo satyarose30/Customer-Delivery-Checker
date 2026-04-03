@@ -47,11 +47,11 @@
         },
         "index": {
             "DOMUS_PINCODE_CAT_PINCODE_ID": true,
-            "DOMUS_PINCODE_CAT_CATEGORY_ID": true,
-            "DOMUS_PINCODE_CAT_UNIQUE": true
+            "DOMUS_PINCODE_CAT_CATEGORY_ID": true
         },
         "constraint": {
             "PRIMARY": true,
+            "DOMUS_PINCODE_CAT_UNIQUE": true,
             "DOMUS_PINCODE_CAT_PINCODE_ID": true,
             "DOMUS_PINCODE_CAT_CATEGORY_ID": true
         }
@@ -64,11 +64,11 @@
         },
         "index": {
             "DOMUS_PINCODE_PROD_PINCODE_ID": true,
-            "DOMUS_PINCODE_PROD_PRODUCT_ID": true,
-            "DOMUS_PINCODE_PROD_UNIQUE": true
+            "DOMUS_PINCODE_PROD_PRODUCT_ID": true
         },
         "constraint": {
             "PRIMARY": true,
+            "DOMUS_PINCODE_PROD_UNIQUE": true,
             "DOMUS_PINCODE_PROD_PINCODE_ID": true,
             "DOMUS_PINCODE_PROD_PRODUCT_ID": true
         }
