@@ -18,13 +18,84 @@ class AddDeliverySlots implements SchemaPatchInterface
     public function apply(): void
     {
         $this->moduleDataSetup->getConnection()->startSetup();
-        /**
-         * Intentionally no-op.
-         *
-         * Delivery schedule table ownership now lives in declarative schema
-         * (`etc/db_schema.xml`) to avoid dual ownership/drift between
-         * imperative schema patches and declarative definitions.
-         */
+
+        $connection = $this->moduleDataSetup->getConnection();
+        $tableName = $this->moduleDataSetup->getTable('domus_delivery_schedule');
+
+        if (!$connection->isTableExists($tableName)) {
+            $table = $connection->newTable($tableName)
+                ->addColumn(
+                    'entity_id',
+                    Table::TYPE_INTEGER,
+                    null,
+                    ['identity' => true, 'nullable' => false, 'primary' => true],
+                    'Entity ID'
+                )
+                ->addColumn(
+                    'pincode_id',
+                    Table::TYPE_INTEGER,
+                    null,
+                    ['unsigned' => true, 'nullable' => false],
+                    'Pincode ID'
+                )
+                ->addColumn(
+                    'day_of_week',
+                    Table::TYPE_TEXT,
+                    20,
+                    ['nullable' => false],
+                    'Day of Week'
+                )
+                ->addColumn(
+                    'time_from',
+                    Table::TYPE_TEXT,
+                    null,
+                    ['nullable' => false],
+                    'Start Time'
+                )
+                ->addColumn(
+                    'time_to',
+                    Table::TYPE_TEXT,
+                    null,
+                    ['nullable' => false],
+                    'End Time'
+                )
+                ->addColumn(
+                    'is_available',
+                    Table::TYPE_SMALLINT,
+                    null,
+                    ['nullable' => false, 'default' => 1],
+                    'Availability Flag'
+                )
+                ->addColumn(
+                    'max_orders',
+                    Table::TYPE_INTEGER,
+                    null,
+                    ['nullable' => true],
+                    'Maximum Orders'
+                )
+                ->addColumn(
+                    'current_orders',
+                    Table::TYPE_INTEGER,
+                    null,
+                    ['nullable' => false, 'default' => 0],
+                    'Current Orders'
+                )
+                ->addForeignKey(
+                    $this->moduleDataSetup->getFKName(
+                        $tableName,
+                        'pincode_id',
+                        'domus_delivery_pincode',
+                        'entity_id'
+                    ),
+                    'pincode_id',
+                    $this->moduleDataSetup->getTable('domus_delivery_pincode'),
+                    'entity_id',
+                    Table::ACTION_CASCADE
+                )
+                ->setComment('Delivery Schedule Table');
+
+            $connection->createTable($table);
+        }
 
         $this->moduleDataSetup->getConnection()->endSetup();
     }
