@@ -27,11 +27,11 @@ class Autocomplete extends Action
 
     public function execute()
     {
-        $query = $this->getRequest()->getParam('q');
+        $query = (string)$this->getRequest()->getParam('q', '');
 
         $result = $this->jsonFactory->create();
         try {
-            $searchResults = $this->searchManagement->searchPincodes($query);
+            $searchResults = $this->searchManagement->autocomplete($query);
             return $result->setData([
                 'success' => true,
                 'items' => $searchResults->getItems()
