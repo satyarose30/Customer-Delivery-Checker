@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">
+                domus_customer_delivery_pincode_listing.domus_customer_delivery_pincode_listing_data_source
+            </item>
+        </item>
+    </argument>
+    <settings>
+        <spinner>domus_customer_delivery_pincode_columns</spinner>
+        <deps>
+            <dep>domus_customer_delivery_pincode_listing.domus_customer_delivery_pincode_listing_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="domus_customer_delivery_pincode_listing_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <updateUrl path="mui/index/render"/>
+        </settings>
+        <aclResource>Domus_CustomerDeliveryChecker::manage</aclResource>
+        <dataProvider class="Domus\CustomerDeliveryChecker\Ui\Component\Listing\DataProvider"
+                      name="domus_customer_delivery_pincode_listing_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>entity_id</primaryFieldName>
+                <updateFieldName>entity_id</updateFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <listingToolbar name="listing_top">
+        <settings>
+            <sticky>true</sticky>
+        </settings>
+        <bookmark name="bookmarks"/>
+        <columnsControls name="columns_controls"/>
+        <filters name="listing_filters">
+            <filterSelect name="is_active" provider="${ $.parentName }">
+                <settings>
+                    <options class="Magento\Config\Model\Config\Source\Yesno"/>
+                    <caption translate="true">Select...</caption>
+                    <label translate="true">Status</label>
+                    <dataScope>is_active</dataScope>
+                </settings>
+            </filterSelect>
+            <filterSelect name="is_deliverable" provider="${ $.parentName }">
+                <settings>
+                    <options class="Magento\Config\Model\Config\Source\Yesno"/>
+                    <caption translate="true">Select...</caption>
+                    <label translate="true">Deliverable</label>
+                    <dataScope>is_deliverable</dataScope>
+                </settings>
+            </filterSelect>
+            <filterSelect name="is_cod_available" provider="${ $.parentName }">
+                <settings>
+                    <options class="Magento\Config\Model\Config\Source\Yesno"/>
+                    <caption translate="true">Select...</caption>
+                    <label translate="true">COD Available</label>
+                    <dataScope>is_cod_available</dataScope>
+                </settings>
+            </filterSelect>
+        </filters>
+        <massaction name="listing_massaction">
+            <action name="delete">
+                <settings>
+                    <confirm>
+                        <message translate="true">Delete selected pincodes?</message>
+                        <title translate="true">Delete Items</title>
+                    </confirm>
+                    <url path="customerdeliverychecker/pincode/massDelete"/>
+                    <type>delete</type>
+                    <label translate="true">Delete</label>
+                </settings>
+            </action>
+        </massaction>
+        <paging name="listing_paging"/>
+    </listingToolbar>
+    <columns name="domus_customer_delivery_pincode_columns">
+        <selectionsColumn name="ids" sortOrder="0">
+            <settings>
+                <indexField>entity_id</indexField>
+            </settings>
+        </selectionsColumn>
+        <column name="entity_id" sortOrder="10">
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">ID</label>
+                <sorting>desc</sorting>
+            </settings>
+        </column>
+        <column name="pincode" sortOrder="20">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Pincode</label>
+                <editor>
+                    <editorType>text</editorType>
+                </editor>
+            </settings>
+        </column>
+        <column name="country_id" sortOrder="30">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Country</label>
+            </settings>
+        </column>
+        <column name="city" sortOrder="40">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">City</label>
+                <editor>
+                    <editorType>text</editorType>
+                </editor>
+            </settings>
+        </column>
+        <column name="state" sortOrder="50">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">State</label>
+                <editor>
+                    <editorType>text</editorType>
+                </editor>
+            </settings>
+        </column>
+        <column name="area_name" sortOrder="55">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Area</label>
+                <editor>
+                    <editorType>text</editorType>
+                </editor>
+            </settings>
+        </column>
+        <column name="is_deliverable" sortOrder="60" component="Magento_Ui/js/grid/columns/select">
+            <settings>
+                <options class="Magento\Config\Model\Config\Source\Yesno"/>
+                <filter>select</filter>
+                <label translate="true">Deliverable</label>
+                <dataType>select</dataType>
+                <editor>
+                    <editorType>select</editorType>
+                </editor>
+            </settings>
+        </column>
+        <column name="is_cod_available" sortOrder="70" component="Magento_Ui/js/grid/columns/select">
+            <settings>
+                <options class="Magento\Config\Model\Config\Source\Yesno"/>
+                <filter>select</filter>
+                <label translate="true">COD Available</label>
+                <dataType>select</dataType>
+                <editor>
+                    <editorType>select</editorType>
+                </editor>
+            </settings>
+        </column>
+        <column name="estimated_delivery_days" sortOrder="80">
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">Est. Delivery Days</label>
+                <editor>
+                    <editorType>text</editorType>
+                </editor>
+            </settings>
+        </column>
+        <column name="shipping_charge" sortOrder="90">
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">Shipping Charge</label>
+                <editor>
+                    <editorType>text</editorType>
+                </editor>
+            </settings>
+        </column>
+        <column name="cod_charge" sortOrder="100">
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">COD Charge</label>
+                <editor>
+                    <editorType>text</editorType>
+                </editor>
+            </settings>
+        </column>
+        <column name="is_active" sortOrder="110" component="Magento_Ui/js/grid/columns/select">
+            <settings>
+                <options class="Magento\Config\Model\Config\Source\Yesno"/>
+                <filter>select</filter>
+                <label translate="true">Status</label>
+                <dataType>select</dataType>
+                <editor>
+                    <editorType>select</editorType>
+                </editor>
+            </settings>
+        </column>
+        <column name="created_at" sortOrder="120" component="Magento_Ui/js/grid/columns/date">
+            <settings>
+                <filter>dateRange</filter>
+                <label translate="true">Created At</label>
+                <dataType>date</dataType>
+            </settings>
+        </column>
+        <column name="updated_at" sortOrder="130" component="Magento_Ui/js/grid/columns/date">
+            <settings>
+                <filter>dateRange</filter>
+                <label translate="true">Updated At</label>
+                <dataType>date</dataType>
+            </settings>
+        </column>
+        <actionsColumn name="actions" class="Domus\CustomerDeliveryChecker\Ui\Component\Listing\Column\PincodeActions"
+                       sortOrder="200">
+            <settings>
+                <indexField>entity_id</indexField>
+            </settings>
+        </actionsColumn>
+    </columns>
+</listing>

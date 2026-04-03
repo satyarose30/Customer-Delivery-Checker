@@ -1,0 +1,189 @@
+<?php
+declare(strict_types=1);
+
+namespace Domus\CustomerDeliveryChecker\Setup\Patch\Schema;
+
+use Magento\Framework\Setup\Patch\SchemaPatchInterface;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
+
+/**
+ * Class AddExpressDelivery
+ * @package Domus\CustomerDeliveryChecker\Setup\Patch\Schema
+ */
+class AddExpressDelivery implements SchemaPatchInterface
+{
+    /**
+     * @var ModuleDataSetupInterface
+     */
+    private ModuleDataSetupInterface $moduleDataSetup;
+
+    /**
+     * AddExpressDelivery constructor.
+     *
+     * @param ModuleDataSetupInterface $moduleDataSetup
+     */
+    public function __construct(
+        ModuleDataSetupInterface $moduleDataSetup
+    ) {
+        $this->moduleDataSetup = $moduleDataSetup;
+    }
+
+    /**
+     * Apply patch
+     *
+     * @return void
+     */
+    public function apply()
+    {
+        $this->moduleDataSetup->getConnection()->startSetup();
+        
+        // Add express delivery columns to pincode table
+        $this->moduleDataSetup->getConnection()->addColumn(
+            $this->moduleDataSetup->getTable('domus_delivery_pincode'),
+            'delivery_options',
+            [
+                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                'length' => 255,
+                'nullable' => true,
+                'comment' => 'Delivery Options (standard,express,overnight)'
+            ]
+        );
+        
+$this->moduleDataSetup->getConnection()->addColumn(
+        $this->moduleDataSetup->getTable('domus_delivery_pincode'),
+        'express_charge',
+            [
+                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
+                'length' => '10,2',
+                'nullable' => true,
+                'default' => 0,
+                'comment' => 'Express Delivery Charge'
+            ]
+        );
+        
+$this->moduleDataSetup->getConnection()->addColumn(
+        $this->moduleDataSetup->getTable('domus_delivery_pincode'),
+        'overnight_charge',
+            [
+                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
+                'length' => '10,2',
+                'nullable' => true,
+                'default' => 0,
+                'comment' => 'Overnight Delivery Charge'
+            ]
+        );
+        
+$this->moduleDataSetup->getConnection()->addColumn(
+        $this->moduleDataSetup->getTable('domus_delivery_pincode'),
+        'express_cutoff_time',
+            [
+                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_DATETIME,
+                'nullable' => true,
+                'comment' => 'Express Delivery Cut-off Time'
+            ]
+        );
+        
+        // Create express delivery analytics table
+        $this->createExpressAnalyticsTable();
+        
+        $this->moduleDataSetup->getConnection()->endSetup();
+    }
+    
+    /**
+     * Create express delivery analytics table
+     */
+    private function createExpressAnalyticsTable(): void
+    {
+        $table = $this->moduleDataSetup->getConnection()
+            ->newTable(
+                $this->moduleDataSetup->getTable('domus_express_delivery_analytics')
+            )
+            ->addColumn(
+                'entity_id',
+                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                null,
+                ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
+                'Entity ID'
+            )
+            ->addColumn(
+                'order_id',
+                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                null,
+                ['unsigned' => true, 'nullable' => false],
+                'Order ID'
+            )
+            ->addColumn(
+                'pincode',
+                \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                10,
+                ['nullable' => false],
+                'Pincode'
+            )
+            ->addColumn(
+                'delivery_type',
+                \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                50,
+                ['nullable' => false],
+                'Delivery Type (express/overnight/standard)'
+            )
+            ->addColumn(
+                'charge_amount',
+                \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
+                '10,2',
+                ['nullable' => false, 'default' => '0.00'],
+                'Charge Amount'
+            )
+            ->addColumn(
+                'delivery_time',
+                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                null,
+                ['unsigned' => true, 'nullable' => false],
+                'Delivery Time (hours)'
+            )
+            ->addColumn(
+                'created_at',
+                \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
+                null,
+                ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
+                'Created At'
+            )
+->addIndex(
+        $this->moduleDataSetup->getIdxName('domus_express_delivery_analytics', ['order_id']),
+        ['order_id']
+    )
+    ->addIndex(
+        $this->moduleDataSetup->getIdxName('domus_express_delivery_analytics', ['pincode']),
+        ['pincode']
+    )
+    ->addForeignKey(
+        $this->moduleDataSetup->getFkName('domus_express_delivery_analytics', 'order_id', 'sales_order', 'entity_id'),
+        'order_id',
+        $this->moduleDataSetup->getTable('sales_order'),
+        'entity_id',
+        \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+    )
+    ->setComment('Express Delivery Analytics Table');
+
+    $this->moduleDataSetup->getConnection()->createTable($table);
+    }
+
+    /**
+     * Get dependencies
+     *
+     * @return array
+     */
+    public static function getDependencies(): array
+    {
+        return [];
+    }
+
+    /**
+     * Get aliases
+     *
+     * @return array
+     */
+    public function getAliases(): array
+    {
+        return [];
+    }
+}

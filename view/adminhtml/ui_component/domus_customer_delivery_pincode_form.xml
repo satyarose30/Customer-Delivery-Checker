@@ -1,0 +1,217 @@
+<?xml version="1.0"?>
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">domus_customer_delivery_pincode_form.pincode_form_data_source</item>
+        </item>
+        <item name="label" xsi:type="string" translate="true">Pincode Information</item>
+        <item name="template" xsi:type="string">templates/form/collapsible</item>
+    </argument>
+
+    <settings>
+        <buttons>
+            <button name="back" class="Domus\CustomerDeliveryChecker\Block\Adminhtml\Pincode\Edit\BackButton"/>
+            <button name="delete" class="Domus\CustomerDeliveryChecker\Block\Adminhtml\Pincode\Edit\DeleteButton"/>
+            <button name="save_and_continue" class="Domus\CustomerDeliveryChecker\Block\Adminhtml\Pincode\Edit\SaveAndContinueButton"/>
+            <button name="save" class="Domus\CustomerDeliveryChecker\Block\Adminhtml\Pincode\Edit\SaveButton"/>
+        </buttons>
+        <namespace>domus_customer_delivery_pincode_form</namespace>
+        <dataScope>data</dataScope>
+        <deps>
+            <dep>domus_customer_delivery_pincode_form.pincode_form_data_source</dep>
+        </deps>
+    </settings>
+
+    <dataSource name="pincode_form_data_source">
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+            </item>
+        </argument>
+        <settings>
+            <submitUrl path="customerdeliverychecker/pincode/save"/>
+        </settings>
+        <dataProvider class="Domus\CustomerDeliveryChecker\Ui\Component\Form\DataProvider" name="pincode_form_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>entity_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+
+    <fieldset name="general">
+        <settings>
+            <label translate="true">General Information</label>
+        </settings>
+        
+        <field name="entity_id" formElement="hidden">
+            <settings>
+                <dataType>text</dataType>
+            </settings>
+        </field>
+
+        <field name="pincode" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">pincode</item>
+                </item>
+            </argument>
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                    <rule name="min_text_length" xsi:type="number">6</rule>
+                    <rule name="max_text_length" xsi:type="number">6</rule>
+                    <rule name="validate-digits" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>text</dataType>
+                <label translate="true">Pincode</label>
+                <dataScope>pincode</dataScope>
+            </settings>
+        </field>
+
+        <field name="city" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">pincode</item>
+                </item>
+            </argument>
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>text</dataType>
+                <label translate="true">City</label>
+                <dataScope>city</dataScope>
+            </settings>
+        </field>
+
+        <field name="state" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">pincode</item>
+                </item>
+            </argument>
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>text</dataType>
+                <label translate="true">State</label>
+                <dataScope>state</dataScope>
+            </settings>
+        </field>
+
+        <field name="country" formElement="select">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">pincode</item>
+                </item>
+            </argument>
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>text</dataType>
+                <label translate="true">Country</label>
+                <dataScope>country</dataScope>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="Magento\Directory\Model\ResourceModel\Country\Collection"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+
+        <field name="estimated_days" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">pincode</item>
+                </item>
+            </argument>
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                    <rule name="validate-number" xsi:type="boolean">true</rule>
+                    <rule name="validate-greater-than-zero" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>text</dataType>
+                <label translate="true">Estimated Delivery Days</label>
+                <dataScope>estimated_days</dataScope>
+                <default>3</default>
+            </settings>
+        </field>
+
+        <field name="cod_available" formElement="checkbox">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">pincode</item>
+                    <item name="prefer" xsi:type="string">toggle</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>boolean</dataType>
+                <label translate="true">Cash on Delivery Available</label>
+                <dataScope>cod_available</dataScope>
+                <default>1</default>
+            </settings>
+        </field>
+
+        <field name="message" formElement="textarea">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">pincode</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Custom Message</label>
+                <dataScope>message</dataScope>
+                <visible>true</visible>
+            </settings>
+        </field>
+
+        <field name="is_active" formElement="checkbox">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">pincode</item>
+                    <item name="prefer" xsi:type="string">toggle</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>boolean</dataType>
+                <label translate="true">Active</label>
+                <dataScope>is_active</dataScope>
+                <default>1</default>
+            </settings>
+        </field>
+    </fieldset>
+
+    <fieldset name="category_association">
+        <settings>
+            <label translate="true">Category Association</label>
+        </settings>
+        
+        <field name="category_ids" formElement="multiselect">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">pincode</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Categories</label>
+                <dataScope>category_ids</dataScope>
+                <elementTmpl>ui/form/element/multiselect</elementTmpl>
+            </settings>
+            <formElements>
+                <multiselect>
+                    <settings>
+                        <options class="Domus\CustomerDeliveryChecker\Model\Config\Source\CategoryTree"/>
+                    </settings>
+                </multiselect>
+            </formElements>
+        </field>
+    </fieldset>
+</form>

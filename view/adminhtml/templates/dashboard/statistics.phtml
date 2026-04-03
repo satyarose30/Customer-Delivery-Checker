@@ -1,0 +1,139 @@
+<?php
+/** @var Domus\CustomerDeliveryChecker\Block\Adminhtml\Dashboard\Statistics $block */
+?>
+<div class="domus-dashboard">
+    <div class="domus-dashboard-header">
+        <h1><?= $block->escapeHtml(__('Delivery Analytics Dashboard')) ?></h1>
+    </div>
+
+    <div class="domus-dashboard-stats">
+        <div class="domus-stat-card total">
+            <div class="stat-icon">📍</div>
+            <div class="stat-content">
+                <span class="stat-value"><?= (int)$block->getTotalPincodes() ?></span>
+                <span class="stat-label"><?= $block->escapeHtml(__('Total Pincodes')) ?></span>
+            </div>
+        </div>
+
+        <div class="domus-stat-card deliverable">
+            <div class="stat-icon">✅</div>
+            <div class="stat-content">
+                <span class="stat-value"><?= (int)$block->getDeliverablePincodes() ?></span>
+                <span class="stat-label"><?= $block->escapeHtml(__('Deliverable')) ?></span>
+            </div>
+        </div>
+
+        <div class="domus-stat-card non-deliverable">
+            <div class="stat-icon">❌</div>
+            <div class="stat-content">
+                <span class="stat-value"><?= (int)$block->getNonDeliverablePincodes() ?></span>
+                <span class="stat-label"><?= $block->escapeHtml(__('Non-Deliverable')) ?></span>
+            </div>
+        </div>
+
+        <div class="domus-stat-card cod">
+            <div class="stat-icon">💰</div>
+            <div class="stat-content">
+                <span class="stat-value"><?= (int)$block->getCodPincodes() ?></span>
+                <span class="stat-label"><?= $block->escapeHtml(__('COD Available')) ?></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="domus-dashboard-metrics">
+        <div class="domus-metric-card">
+            <h3><?= $block->escapeHtml(__('Delivery Success Rate')) ?></h3>
+            <div class="metric-value success-rate">
+                <span class="rate-value"><?= $block->escapeHtml($block->getDeliverySuccessRate()) ?>%</span>
+                <div class="rate-bar">
+                    <div class="rate-fill" style="width: <?= $block->escapeHtmlAttr($block->getDeliverySuccessRate()) ?>%"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="domus-metric-card">
+            <h3><?= $block->escapeHtml(__('Avg. Delivery Days')) ?></h3>
+            <div class="metric-value">
+                <span class="metric-number"><?= $block->escapeHtml($block->getAverageDeliveryDays()) ?></span>
+                <span class="metric-unit"><?= $block->escapeHtml(__('days')) ?></span>
+            </div>
+        </div>
+
+        <div class="domus-metric-card">
+            <h3><?= $block->escapeHtml(__('Avg. Shipping Charge')) ?></h3>
+            <div class="metric-value">
+                <span class="metric-number">₹<?= $block->escapeHtml($block->getAverageShippingCharge()) ?></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="domus-dashboard-charts">
+        <div class="domus-chart-card">
+            <h3><?= $block->escapeHtml(__('Top 10 States by Pincodes')) ?></h3>
+            <div class="chart-container">
+                <table class="data-grid">
+                    <thead>
+                        <tr>
+                            <th><?= $block->escapeHtml(__('State')) ?></th>
+                            <th><?= $block->escapeHtml(__('Count')) ?></th>
+                            <th><?= $block->escapeHtml(__('Percentage')) ?></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php $total = $block->getTotalPincodes(); ?>
+                        <?php foreach ($block->getPincodesByState() as $state => $count): ?>
+                        <tr>
+                            <td><?= $block->escapeHtml($state) ?></td>
+                            <td><?= (int)$count ?></td>
+                            <td><?= $total > 0 ? $block->escapeHtml(round(($count / $total) * 100, 1)) . '%' : '0%' ?></td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="domus-chart-card">
+            <h3><?= $block->escapeHtml(__('Top 10 Cities (Deliverable)')) ?></h3>
+            <div class="chart-container">
+                <table class="data-grid">
+                    <thead>
+                        <tr>
+                            <th><?= $block->escapeHtml(__('City')) ?></th>
+                            <th><?= $block->escapeHtml(__('Pincodes')) ?></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($block->getTopCities() as $city => $count): ?>
+                        <tr>
+                            <td><?= $block->escapeHtml($city) ?></td>
+                            <td><?= (int)$count ?></td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="domus-dashboard-actions">
+        <a href="<?= $block->getUrl('customerdeliverychecker/pincode/index') ?>" class="action primary">
+            <?= $block->escapeHtml(__('Manage Pincodes')) ?>
+        </a>
+        <a href="<?= $block->getUrl('customerdeliverychecker/pincode/edit') ?>" class="action secondary">
+            <?= $block->escapeHtml(__('Add New Pincode')) ?>
+        </a>
+        <a href="<?= $block->getUrl('customerdeliverychecker/dashboard/export') ?>" class="action secondary">
+            <?= $block->escapeHtml(__('Export Report')) ?>
+        </a>
+    </div>
+</div>
+
+<script>
+require(['jquery'], function($) {
+    $('.domus-stat-card').hover(
+        function() { $(this).addClass('hover'); },
+        function() { $(this).removeClass('hover'); }
+    );
+});
+</script>

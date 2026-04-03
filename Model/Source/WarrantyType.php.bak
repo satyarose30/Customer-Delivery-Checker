@@ -1,0 +1,33 @@
+<?php
+// app/code/Domus/CustomerDeliveryChecker/Model/Source/WarrantyType.php
+
+declare(strict_types=1);
+
+namespace Domus\CustomerDeliveryChecker\Model\Source;
+
+use Magento\Framework\Option\ArrayInterface;
+
+/**
+ * Class WarrantyType
+ * @package Domus\CustomerDeliveryChecker\Model\Source
+ */
+class WarrantyType implements ArrayInterface
+{
+    /**
+     * Return array of options as value-label pairs
+     *
+     * @return array
+     */
+    public function toOptionArray(): array
+    {
+        return [
+            ['value' => 'manufacturer', 'label' => __('Manufacturer Warranty')],
+            ['value' => 'seller', 'label' => __('Seller Warranty')],
+            ['value' => 'manufacturing_defects', 'label' => __('Manufacturing Defects Only')],
+            ['value' => 'replacement_only', 'label' => __('Replacement Only')],
+            ['value' => 'service_center', 'label' => __('Service Center Warranty')],
+            ['value' => 'no_warranty', 'label' => __('No Warranty')],
+            ['value' => 'other', 'label' => __('Other')]
+        ];
+    }
+}

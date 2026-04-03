@@ -1,0 +1,11 @@
+<?php
+/** @var \Domus\CustomerDeliveryChecker\Block\Adminhtml\Pincode\Import $block */
+?>
+<div class="import-pincodes">
+    <h2><?php echo __('Import Pincodes via CSV'); ?></h2>
+    <form action="<?php echo $block->getImportUrl(); ?>" method="post" enctype="multipart/form-data">
+        <?php echo $block->getBlockHtml('formkey'); ?>
+        <input type="file" name="import_csv" />
+        <button type="submit" class="action-primary"><?php echo __('Upload & Import'); ?></button>
+    </form>
+</div>
