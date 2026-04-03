@@ -1,0 +1,8 @@
+/* Express delivery block styling */
+.express-delivery-options {
+    background-color: #fcf8e3;
+    border: 1px solid #faebcc;
+    color: #8a6d3b;
+    padding: 15px;
+    margin-bottom: 20px;
+}

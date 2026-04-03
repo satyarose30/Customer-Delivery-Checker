@@ -1,0 +1,117 @@
+/* Pincode Checker Styles */
+.pincode-checker {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 15px;
+    margin-bottom: 20px;
+    background: #f9f9f9;
+}
+
+.pincode-checker-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.pincode-checker-form .control {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.pincode-checker-form .input-text {
+    flex: 1;
+    max-width: 200px;
+}
+
+.check-btn {
+    border-radius: 3px;
+}
+
+/* Warranty Information Styles */
+.warranty-info {
+    margin: 15px 0;
+    padding: 10px;
+    background: #f0f8ff;
+    border-left: 3px solid #007bff;
+    border-radius: 3px;
+}
+
+.warranty-title {
+    margin-bottom: 10px;
+    color: #007bff;
+    font-size: 14px;
+}
+
+.warranty-content > div {
+    margin-bottom: 5px;
+    font-size: 12px;
+}
+
+.warranty-content .warranty-type {
+    font-weight: bold;
+}
+
+.warranty-content .warranty-details {
+    color: #666;
+    line-height: 1.4;
+}
+
+/* Result Styles */
+.pincode-result {
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 3px;
+}
+
+.pincode-result .message.success {
+    color: #3c763d;
+    background: #dff0d8;
+    border: 1px solid #d6e9c6;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.pincode-result .message.error {
+    color: #a94442;
+    background: #f2dede;
+    border: 1px solid #ebccd1;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.warranty-summary {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 3px;
+    padding: 10px;
+    margin-top: 10px;
+}
+
+.warranty-summary h4 {
+    margin: 0 0 10px 0;
+    color: #333;
+    font-size: 14px;
+}
+
+.warranty-summary div {
+    margin-bottom: 5px;
+    font-size: 12px;
+}
+
+.estimated-days, .cod-available {
+    color: #666;
+    font-size: 12px;
+    margin-bottom: 5px;
+}
+
+.cod-available {
+    color: #28a745;
+}
+
+.pincode-loader {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+}

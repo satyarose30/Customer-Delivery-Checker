@@ -1,0 +1,76 @@
+.domus-checkout-pincode-checker {
+    margin: 15px 0;
+    padding: 15px;
+    border: 1px solid #e8e8e8;
+    border-radius: 4px;
+    background: #f9f9f9;
+}
+
+.domus-checkout-pincode-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    font-size: 16px;
+}
+
+.domus-synced-badge {
+    font-size: 11px;
+    background: #e8f5e9;
+    color: #2e7d32;
+    padding: 3px 8px;
+    border-radius: 3px;
+    font-weight: 600;
+}
+
+.domus-checkout-pincode-status {
+    margin: 8px 0;
+    padding: 8px 12px;
+    border-radius: 3px;
+    font-size: 13px;
+}
+
+.domus-pincode-status-loading {
+    color: #666;
+}
+
+.domus-pincode-status-available {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #2e7d32;
+    background: #e8f5e9;
+    padding: 8px 12px;
+    border-radius: 3px;
+}
+
+.domus-pincode-status-not-available {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #c62828;
+    background: #ffebee;
+    padding: 8px 12px;
+    border-radius: 3px;
+}
+
+.domus-status-icon.success {
+    color: #4caf50;
+    font-size: 16px;
+}
+
+.domus-status-icon.error {
+    color: #e53935;
+    font-size: 16px;
+}
+
+.cod-badge-inline {
+    display: inline-block;
+    background: #ff9800;
+    color: #fff;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-left: 6px;
+}

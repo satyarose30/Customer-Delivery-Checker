@@ -1,0 +1,22 @@
+<div class="domus-checkout-pincode-status" data-bind="visible: isResultAvailable() || isLoading()">
+    <!-- ko if: isLoading() -->
+    <div class="domus-pincode-status-loading">
+        <span>Checking delivery availability...</span>
+    </div>
+    <!-- /ko -->
+
+    <!-- ko if: !isLoading() && isResultAvailable() -->
+    <div class="domus-pincode-status-available" data-bind="visible: isDeliverable()">
+        <span class="domus-status-icon success">&#10004;</span>
+        <span class="domus-status-text" data-bind="text: getMessage()"></span>
+        <!-- ko if: isCodAvailable() -->
+        <span class="cod-badge-inline">COD</span>
+        <!-- /ko -->
+    </div>
+
+    <div class="domus-pincode-status-not-available" data-bind="visible: isNotDeliverable()">
+        <span class="domus-status-icon error">&#10008;</span>
+        <span class="domus-status-text" data-bind="text: getMessage()"></span>
+    </div>
+    <!-- /ko -->
+</div>

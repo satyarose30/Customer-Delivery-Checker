@@ -1,0 +1,32 @@
+<div class="domus-checkout-pincode-status" data-bind="visible: isChecked()">
+    <div class="domus-checkout-pincode-result">
+        <div class="domus-pincode-available" data-bind="visible: isDeliverable()">
+            <span class="domus-pincode-icon success">&#10004;</span>
+            <div class="domus-pincode-details">
+                <p class="domus-pincode-message" data-bind="text: getMessage()"></p>
+                <p class="domus-pincode-location" data-bind="visible: getDeliveryInfo(), text: getDeliveryInfo()"></p>
+                <!-- ko if: isCodAvailable() -->
+                <p class="domus-pincode-cod">
+                    <span class="cod-badge">COD Available</span>
+                </p>
+                <!-- /ko -->
+                <!-- ko if: checkResult() && checkResult().shipping_charge -->
+                <p class="domus-pincode-shipping-charge">
+                    Shipping: <span data-bind="text: checkResult().shipping_charge"></span>
+                </p>
+                <!-- /ko -->
+            </div>
+        </div>
+
+        <div class="domus-pincode-not-available" data-bind="visible: isNotDeliverable()">
+            <div class="message error message-error">
+                <span class="domus-pincode-icon error">&#10008;</span>
+                <p class="domus-pincode-message" data-bind="text: getMessage()"></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="domus-pincode-error" data-bind="visible: errorMessage()">
+        <p class="domus-pincode-error-msg" data-bind="text: errorMessage()"></p>
+    </div>
+</div>

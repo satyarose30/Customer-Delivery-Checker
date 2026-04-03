@@ -1,0 +1,17 @@
+<div class="tracking-info-dashboard">
+    <div class="block block-tracking">
+        <div class="block-title">
+            <strong><?php echo __('My Deliveries'); ?></strong>
+        </div>
+        <div class="block-content" id="delivery-tracking-app">
+            <p><?php echo __('Select an order to view live tracking.'); ?></p>
+        </div>
+    </div>
+</div>
+<script type="text/x-magento-init">
+    {
+        "#delivery-tracking-app": {
+            "Domus_CustomerDeliveryChecker/js/delivery-tracker": {}
+        }
+    }
+</script>

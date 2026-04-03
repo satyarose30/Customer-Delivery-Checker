@@ -1,0 +1,75 @@
+<?php
+/** @var \Domus\CustomerDeliveryChecker\Block\Check $block */
+
+if (!$block->isEnabled()): ?>
+    <div class="pincode-checker-disabled">
+        <?= $block->escapeHtml(__('Pincode checker is disabled')) ?>
+    </div>
+<?php else: ?>
+<div class="pincode-checker" id="pincode-checker" 
+     data-mage-init='{"Domus_CustomerDeliveryChecker/js/pincode-checker": {
+         "checkUrl": "<?= $block->escapeUrl($block->getUrl('customerdeliverychecker/rest/check')) ?>",
+         "warrantyUrl": "<?= $block->escapeUrl($block->getWarrantyCheckUrl()) ?>",
+         "productId": "<?= $block->escapeHtml($block->getCurrentProductId() ?: '') ?>",
+         "apiKey": "<?= $block->escapeHtml($block->getGoogleMapsApiKey() ?: '') ?>",
+         "pincodes": <?= $block->getPincodesJson() ?>
+     }}'>
+    
+    <div class="pincode-checker-title">
+        <span><?= $block->escapeHtml(__('Check Delivery Availability')) ?></span>
+    </div>
+    
+    <div class="pincode-checker-form">
+        <div class="field">
+            <label class="label" for="pincode-input">
+                <span><?= $block->escapeHtml(__('Enter Pincode')) ?></span>
+            </label>
+            <div class="control">
+                <input type="text" 
+                       id="pincode-input" 
+                       name="pincode" 
+                       class="input-text" 
+                       maxlength="6"
+                       placeholder="<?= $block->escapeHtml(__('6-digit Pincode')) ?>"
+                       autocomplete="off" />
+                <button type="button" 
+                        class="action primary check-btn"
+                        id="pincode-check-btn">
+                    <span><?= $block->escapeHtml(__('Check')) ?></span>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Warranty Information Section -->
+    <?php if ($block->isWarrantyEnabled() && $block->getCurrentProductId()): ?>
+    <div class="warranty-info" id="warranty-info" style="display: none;">
+        <div class="warranty-title">
+            <strong><?= $block->escapeHtml(__('Warranty Information')) ?></strong>
+        </div>
+        <div class="warranty-content">
+            <div class="warranty-type"></div>
+            <div class="warranty-duration"></div>
+            <div class="warranty-details"></div>
+        </div>
+    </div>
+    <?php endif; ?>
+    
+    <div class="pincode-result" id="pincode-result" style="display: none;">
+        <div class="message"></div>
+        <div class="details"></div>
+    </div>
+    
+    <div class="pincode-loader" id="pincode-loader" style="display: none;">
+        <?= $block->escapeHtml(__('Checking...')) ?>
+    </div>
+</div>
+
+<script>
+    // Fallback if mage-init fails
+    require(['jquery', 'Domus_CustomerDeliveryChecker/js/pincode-checker'], function($) {
+        'use strict';
+        // Additional initialization if needed
+    });
+</script>
+<?php endif; ?>

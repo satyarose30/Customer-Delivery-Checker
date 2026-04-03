@@ -1,0 +1,136 @@
+<div class="domus-pincode-checker-wrapper">
+    <div class="domus-pincode-header">
+        <!-- ko if: enableGeolocation -->
+        <button type="button" class="domus-geo-button" data-bind="click: detectLocation, enable: !geoLoading()">
+            <span data-bind="visible: !geoLoading()">📍 Detect My Location</span>
+            <span data-bind="visible: geoLoading()">Detecting...</span>
+        </button>
+        <!-- /ko -->
+    </div>
+
+<div class="domus-pincode-checker-form" data-bind="visible: !isChecked()">
+<label class="domus-pincode-label" data-bind="text: pincodeLabel"></label>
+<div class="domus-pincode-input-wrapper">
+<input type="text"
+class="domus-pincode-input input-text"
+data-bind="value: pincode, event: { keydown: handleSuggestionKey, blur: function() { setTimeout(function() { showSuggestions(false); }, 200); } }, attr: { placeholder: pincodeLabel }"
+maxlength="8"
+autocomplete="off"/>
+<button type="button"
+class="domus-pincode-check-btn action primary"
+data-bind="click: checkPincode, enable: !isLoading()">
+<span data-bind="visible: !isLoading(), text: checkButtonText"></span>
+<span data-bind="visible: isLoading()">Checking...</span>
+</button>
+</div>
+<!-- ko if: showSuggestions() && suggestions().length > 0 -->
+<ul class="domus-pincode-suggestions" data-bind="foreach: suggestions, visible: showSuggestions">
+<li class="domus-suggestion-item" data-bind="css: $parent.getSSuggestionClass($index()), click: function() { $parent.selectSuggestion($data); }">
+<span class="suggestion-pincode" data-bind="text: pincode"></span>
+<span class="suggestion-details" data-bind="text: $parent.formatSuggestion($data)"></span>
+<!-- ko if: cod_available -->
+<span class="suggestion-cod-badge">COD</span>
+<!-- /ko -->
+</li>
+</ul>
+<!-- /ko -->
+</div>
+
+    <div class="domus-pincode-result" data-bind="visible: isChecked()">
+        <div class="domus-pincode-result-header">
+            <span class="domus-pincode-verified" data-bind="text: pincode"></span>
+            <button type="button" class="domus-pincode-change-btn action" data-bind="click: changePincode">
+                <span data-bind="text: changeButtonText"></span>
+            </button>
+        </div>
+
+        <div class="domus-pincode-available" data-bind="visible: isDeliverable()">
+            <span class="domus-pincode-icon success">&#10004;</span>
+            <div class="domus-pincode-details">
+                <p class="domus-pincode-message" data-bind="text: getMessage()"></p>
+                <p class="domus-pincode-location" data-bind="visible: getDeliveryInfo(), text: getDeliveryInfo()"></p>
+                <!-- ko if: isCodAvailable() -->
+                <p class="domus-pincode-cod">
+                    <span class="cod-badge">COD Available</span>
+                </p>
+                <!-- /ko -->
+                <!-- ko if: checkResult() && checkResult().shipping_charge -->
+                <p class="domus-pincode-shipping-charge">
+                    Shipping: <span data-bind="text: formatCurrency(checkResult().shipping_charge)"></span>
+                </p>
+                <!-- /ko -->
+
+                <!-- Warranty and Returnable Info -->
+                <!-- ko if: checkResult() && checkResult().returnable -->
+                <p class="domus-pincode-returnable">
+                    <span class="domus-returnable-text" data-bind="text: checkResult().returnable"></span>
+                </p>
+                <!-- /ko -->
+                <!-- ko if: checkResult() && checkResult().warranty -->
+                <p class="domus-pincode-warranty">
+                    <span class="domus-warranty-label">Original manufacturer's warranty :</span>
+                    <span class="domus-warranty-text" data-bind="text: checkResult().warranty"></span>
+                </p>
+                <!-- /ko -->
+                
+                <!-- Restrictions Display -->
+                <!-- ko if: checkResult() && checkResult().category_restricted -->
+                <p class="domus-pincode-restriction">
+                    <span class="restriction-warning">⚠ Category-specific delivery</span>
+                </p>
+                <!-- /ko -->
+                <!-- ko if: checkResult() && checkResult().product_restricted -->
+                <p class="domus-pincode-restriction">
+                    <span class="restriction-warning">⚠ Product-specific delivery</span>
+                </p>
+                <!-- /ko -->
+                <!-- ko if: checkResult() && checkResult().weight_restricted -->
+                <p class="domus-pincode-restriction">
+                    <span class="restriction-info">ℹ Weight range applies</span>
+                </p>
+                <!-- /ko -->
+                <!-- ko if: checkResult() && checkResult().price_restricted -->
+                <p class="domus-pincode-restriction">
+                    <span class="restriction-info">ℹ Order value applies</span>
+                </p>
+                <!-- /ko -->
+
+                <!-- Delivery Date Picker -->
+                <!-- ko if: enableDatePicker && checkResult() && checkResult().delivery_dates && checkResult().delivery_dates.length -->
+                <div class="domus-delivery-dates">
+                    <label>Available Delivery Dates:</label>
+                    <select class="domus-delivery-date-select" data-bind="options: checkResult().delivery_dates, optionsText: 'formatted_date', value: selectedDeliveryDate">
+                        <option value="">Select delivery date</option>
+                    </select>
+                </div>
+                <!-- /ko -->
+
+                <!-- Google Maps -->
+                <!-- ko if: checkResult() && checkResult().latitude && checkResult().longitude && showMap -->
+                <div class="domus-delivery-map">
+                    <button type="button" class="action secondary" data-bind="click: toggleMap">
+                        Show on Map
+                    </button>
+                    <div class="domus-map-container" data-bind="visible: mapVisible, css: {'domus-map-visible': mapVisible}"></div>
+                </div>
+                <!-- /ko -->
+            </div>
+        </div>
+
+        <div class="domus-pincode-not-available" data-bind="visible: isNotDeliverable()">
+            <span class="domus-pincode-icon error">&#10008;</span>
+            <p class="domus-pincode-message" data-bind="text: getMessage()"></p>
+            
+            <!-- Specific restriction messages -->
+            <!-- ko if: categoryId -->
+            <p class="domus-pincode-restriction-detail">
+                This product category may not be deliverable to your location.
+            </p>
+            <!-- /ko -->
+        </div>
+    </div>
+
+    <div class="domus-pincode-error" data-bind="visible: errorMessage()">
+        <p class="domus-pincode-error-msg" data-bind="text: errorMessage()"></p>
+    </div>
+</div>

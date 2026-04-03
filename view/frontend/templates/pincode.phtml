@@ -1,0 +1,223 @@
+<?php
+/** @var \Domus\CustomerDeliveryChecker\Block\Check $block */
+$pincodeChecker = $block->getPincodeCheckerData();
+$isEnabled = $block->isEnabled();
+$product = $block->getProduct();
+?>
+<?php if ($isEnabled): ?>
+<div class="domus-pincode-checker" data-bind="scope: 'pincode-checker'">
+    <div class="pincode-header">
+        <span class="pincode-icon">
+            <img src="<?= $block->escapeUrl($block->getViewFileUrl('Domus_CustomerDeliveryChecker::images/delivery-map.svg')) ?>" 
+                 alt="<?= $block->escapeHtmlAttr(__('Delivery')) ?>" 
+                 width="24" 
+                 height="24"/>
+        </span>
+        <span class="pincode-title"><?= __('Check Delivery Availability') ?></span>
+    </div>
+    
+    <div class="pincode-input-container">
+        <input type="text" 
+               id="pincode-input" 
+               name="pincode" 
+               class="input-text" 
+               placeholder="<?= $block->escapeHtmlAttr(__('Enter your pincode')) ?>"
+               data-bind="value: pincode, event: {keyup: handleKeyUp}"
+               maxlength="6"
+               pattern="[0-9]{6}"
+               autocomplete="postal-code"/>
+        
+        <button type="button" 
+                id="check-pincode-btn" 
+                class="action primary"
+                data-bind="click: checkPincode, attr: {disabled: isLoading()}">
+            <span data-bind="text: isLoading() ? 'Checking...' : 'Check'"><?= __('Check') ?></span>
+        </button>
+    </div>
+    
+    <div class="pincode-result" data-bind="visible: result() !== null, html: resultLabel"></div>
+    
+    <div class="delivery-details" data-bind="visible: isDeliverable()">
+        <div class="delivery-row">
+            <span class="label"><?= __('Estimated Delivery:') ?></span>
+            <span class="value" data-bind="text: estimatedDays"></span>
+        </div>
+        
+        <div class="delivery-row" data-bind="visible: codAvailable()">
+            <span class="label"><?= __('COD:') ?></span>
+            <span class="value cod-yes"><?= __('Available') ?></span>
+        </div>
+        
+        <div class="delivery-row" data-bind="visible: expressAvailable()">
+            <span class="label"><?= __('Express:') ?></span>
+            <span class="value express-yes"><?= __('Available') ?></span>
+        </div>
+        
+        <div class="delivery-row" data-bind="visible: city()">
+            <span class="label"><?= __('City:') ?></span>
+            <span class="value" data-bind="text: city"></span>
+        </div>
+        
+        <div class="delivery-row" data-bind="visible: state()">
+            <span class="label"><?= __('State:') ?></span>
+            <span class="value" data-bind="text: state"></span>
+        </div>
+    </div>
+    
+    <div class="change-pincode" data-bind="visible: isDeliverable()">
+        <button type="button" class="action secondary" data-bind="click: reset">
+            <span><?= __('Change Pincode') ?></span>
+        </button>
+    </div>
+    
+    <div class="not-deliverable" data-bind="visible: !isDeliverable() && result() !== null">
+        <p class="error-message">
+            <span class="error-icon">⚠️</span>
+            <?= __('Sorry, delivery is not available to this pincode.') ?>
+        </p>
+    </div>
+</div>
+
+<script type="text/x-magento-init">
+{
+    ".domus-pincode-checker": {
+        "Magento_Ui/js/core/app": {
+            "components": {
+                "pincode-checker": {
+                    "component": "Domus_CustomerDeliveryChecker/js/pincode-checker",
+                    "productId": <?= $product ? (int)$product->getId() : 0 ?>,
+                    "config": {
+                        "checkUrl": "<?= $block->escapeJs($block->getUrl('customerdeliverychecker/rest/check')) ?>",
+                        "timeslotsUrl": "<?= $block->escapeJs($block->getUrl('customerdeliverychecker/rest/timeslots')) ?>",
+                        "expressUrl": "<?= $block->escapeJs($block->getUrl('customerdeliverychecker/rest/express')) ?>"
+                    }
+                }
+            }
+        }
+    }
+}
+</script>
+
+<style>
+.domus-pincode-checker {
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    margin: 15px 0;
+    background: #f9f9f9;
+}
+
+.pincode-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.pincode-icon {
+    margin-right: 10px;
+}
+
+.pincode-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+}
+
+.pincode-input-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.pincode-input-container input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.pincode-input-container button {
+    padding: 10px 20px;
+}
+
+.pincode-result {
+    margin: 15px 0;
+    padding: 15px;
+    border-radius: 4px;
+}
+
+.pincode-result.success {
+    background: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+}
+
+.pincode-result.error {
+    background: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+}
+
+.delivery-details {
+    background: #fff;
+    padding: 15px;
+    border-radius: 4px;
+    margin-top: 15px;
+}
+
+.delivery-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.delivery-row:last-child {
+    border-bottom: none;
+}
+
+.delivery-row .label {
+    font-weight: 600;
+    color: #666;
+}
+
+.delivery-row .value {
+    color: #333;
+}
+
+.cod-yes {
+    color: #28a745;
+    font-weight: 600;
+}
+
+.express-yes {
+    color: #17a2b8;
+    font-weight: 600;
+}
+
+.change-pincode {
+    margin-top: 15px;
+}
+
+.change-pincode button {
+    font-size: 12px;
+    padding: 8px 16px;
+}
+
+.not-deliverable {
+    margin-top: 15px;
+}
+
+.error-message {
+    color: #721c24;
+    background: #f8d7da;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+.error-icon {
+    margin-right: 5px;
+}
+</style>
+<?php endif; ?>

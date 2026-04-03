@@ -1,0 +1,16 @@
+<div class="enhanced-pincode-checker">
+    <label for="pincode-input"><?php echo __('Check Delivery Availability'); ?></label>
+    <div class="control">
+        <input type="text" id="pincode-input" name="pincode" placeholder="<?php echo __('Enter Pincode'); ?>"/>
+        <button type="button" id="check-pincode-btn"><?php echo __('Check'); ?></button>
+    </div>
+    <div id="pincode-checker-msg"></div>
+</div>
+<!-- Initialize JS -->
+<script type="text/x-magento-init">
+    {
+        ".enhanced-pincode-checker": {
+            "Domus_CustomerDeliveryChecker/js/pincode-checker": {}
+        }
+    }
+</script>
