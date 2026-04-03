@@ -8,7 +8,7 @@ define([
 
     $.widget('domus.timeSlotSelector', {
         options: {
-            slotsUrl: '/rest/V1/customerdeliverychecker/rest/timeSlots',
+            slotsUrl: '/domus/rest/timeslots',
             pincodeInput: '#pincode-input',
             slotContainer: '#time-slots-container',
             dateInput: '#delivery-date',

@@ -17,7 +17,7 @@ define([
 
                 // We perform the check asynchronously and return true initially
                 // The actual blocking logic is handled via the delivery status state
-                var checkUrl = url.build('rest/V1/domus/pincode/check') + '?pincode=' + encodeURIComponent(value);
+                var checkUrl = url.build('domus/rest/check') + '?pincode=' + encodeURIComponent(value);
                 
                 // We use a global state to track if the current pincode is valid
                 // This allows the checker component to show the message
