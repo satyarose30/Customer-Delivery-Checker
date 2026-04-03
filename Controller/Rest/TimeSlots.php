@@ -8,6 +8,8 @@ use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Domus\CustomerDeliveryChecker\Model\ResourceModel\Pincode\CollectionFactory as PincodeCollectionFactory;
 use Domus\CustomerDeliveryChecker\Model\Source\DeliverySlots;
+use Domus\CustomerDeliveryChecker\Model\Prediction\ETACalculator;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class TimeSlots
@@ -34,6 +36,16 @@ class TimeSlots implements HttpGetActionInterface
      * @var PincodeCollectionFactory
      */
     private PincodeCollectionFactory $pincodeCollectionFactory;
+    
+    /**
+     * @var ETACalculator
+     */
+    private ETACalculator $etaCalculator;
+    
+    /**
+     * @var LoggerInterface
+     */
+    private LoggerInterface $logger;
 
     /**
      * TimeSlots constructor.
@@ -42,17 +54,23 @@ class TimeSlots implements HttpGetActionInterface
      * @param HttpRequest $request
      * @param DeliverySlots $deliverySlots
      * @param PincodeCollectionFactory $pincodeCollectionFactory
+     * @param ETACalculator $etaCalculator
+     * @param LoggerInterface $logger
      */
     public function __construct(
         JsonFactory $resultJsonFactory,
         HttpRequest $request,
         DeliverySlots $deliverySlots,
-        PincodeCollectionFactory $pincodeCollectionFactory
+        PincodeCollectionFactory $pincodeCollectionFactory,
+        ETACalculator $etaCalculator,
+        LoggerInterface $logger
     ) {
         $this->resultJsonFactory = $resultJsonFactory;
         $this->request = $request;
         $this->deliverySlots = $deliverySlots;
         $this->pincodeCollectionFactory = $pincodeCollectionFactory;
+        $this->etaCalculator = $etaCalculator;
+        $this->logger = $logger;
     }
 
     /**
@@ -117,6 +135,7 @@ class TimeSlots implements HttpGetActionInterface
             ]);
 
         } catch (\Exception $e) {
+            $this->logger->error('Time slot fetch failed', ['exception' => $e]);
             return $result->setData([
                 'success' => false,
                 'message' => __('An error occurred while fetching time slots')
@@ -159,10 +178,6 @@ class TimeSlots implements HttpGetActionInterface
      */
     private function getEstimatedTime(string $pincode, string $slot, string $date): string
     {
-        // Use ETACalculator for accurate prediction
-        $etaCalculator = \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Domus\CustomerDeliveryChecker\Model\Prediction\ETACalculator::class);
-        
-        return $etaCalculator->predictETABySlot($pincode, $slot, $date);
+        return $this->etaCalculator->predictETABySlot($pincode, $slot, $date);
     }
 }
