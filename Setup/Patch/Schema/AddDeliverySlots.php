@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Domus\CustomerDeliveryChecker\Setup\Patch\Schema;
 
 use Magento\Framework\Setup\Patch\SchemaPatchInterface;
@@ -7,18 +9,14 @@ use Magento\Framework\DB\Ddl\Table;
 
 class AddDeliverySlots implements SchemaPatchInterface
 {
-    /**
-     * @var ModuleDataSetupInterface
-     */
-    private $moduleDataSetup;
+    private ModuleDataSetupInterface $moduleDataSetup;
 
-    public function __construct(
-        ModuleDataSetupInterface $moduleDataSetup
-    ) {
+    public function __construct(ModuleDataSetupInterface $moduleDataSetup)
+    {
         $this->moduleDataSetup = $moduleDataSetup;
     }
 
-    public function apply()
+    public function apply(): void
     {
         $this->moduleDataSetup->getConnection()->startSetup();
 
@@ -103,12 +101,12 @@ class AddDeliverySlots implements SchemaPatchInterface
         $this->moduleDataSetup->getConnection()->endSetup();
     }
 
-    public static function getDependencies()
+    public static function getDependencies(): array
     {
         return [];
     }
 
-    public function getAliases()
+    public function getAliases(): array
     {
         return [];
     }

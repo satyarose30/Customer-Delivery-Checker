@@ -115,7 +115,7 @@ class TimeSlots implements HttpGetActionInterface
                 $timeRange = $timeRanges[$slotValue] ?? null;
                 
                 // Check if slot is available for this date
-                $isAvailable = $this->isSlotAvailable($slotValue, $date, $pincode);
+                $isAvailable = $this->isSlotAvailable($slotValue, $date);
                 
                 if ($isAvailable) {
                     $availableSlots[] = [
@@ -148,10 +148,9 @@ class TimeSlots implements HttpGetActionInterface
      *
      * @param string $slot
      * @param string $date
-     * @param string $pincode
      * @return bool
      */
-    private function isSlotAvailable(string $slot, string $date, string $pincode): bool
+    private function isSlotAvailable(string $slot, string $date): bool
     {
         // Check delivery capacity for the slot
         // Check if it's a holiday

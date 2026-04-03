@@ -10,25 +10,24 @@ use Magento\Framework\Model\AbstractModel;
 
 class SearchResult extends AbstractModel implements SearchResultInterface
 {
-    public function getItems()
+    public function getItems(): array
     {
         return $this->getData('items') ?? [];
     }
 
-    public function setItems(array $items)
+    public function setItems(array $items): SearchResultInterface
     {
         /** @var PincodeInterface[] $items */
         return $this->setData('items', $items);
     }
 
-    public function getTotalCount()
+    public function getTotalCount(): int
     {
         return (int)($this->getData('total_count') ?? 0);
     }
 
-    public function setTotalCount($count)
+    public function setTotalCount(int $count): SearchResultInterface
     {
-        return $this->setData('total_count', (int)$count);
+        return $this->setData('total_count', $count);
     }
 }
-
