@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Domus\CustomerDeliveryChecker\Setup\Patch\Schema;
 
 use Magento\Framework\Setup\Patch\SchemaPatchInterface;
@@ -7,23 +9,19 @@ use Magento\Framework\DB\Ddl\Table;
 
 class AddDeliverySlots implements SchemaPatchInterface
 {
-    /**
-     * @var ModuleDataSetupInterface
-     */
-    private $moduleDataSetup;
+    private ModuleDataSetupInterface $moduleDataSetup;
 
-    public function __construct(
-        ModuleDataSetupInterface $moduleDataSetup
-    ) {
+    public function __construct(ModuleDataSetupInterface $moduleDataSetup)
+    {
         $this->moduleDataSetup = $moduleDataSetup;
     }
 
-    public function apply()
+    public function apply(): void
     {
         $this->moduleDataSetup->getConnection()->startSetup();
 
         $connection = $this->moduleDataSetup->getConnection();
-        $tableName = $this->moduleDataSetup->getTable('domus_delivery_slots');
+        $tableName = $this->moduleDataSetup->getTable('domus_delivery_schedule');
 
         if (!$connection->isTableExists($tableName)) {
             $table = $connection->newTable($tableName)
@@ -35,11 +33,11 @@ class AddDeliverySlots implements SchemaPatchInterface
                     'Entity ID'
                 )
                 ->addColumn(
-                    'pincode',
-                    Table::TYPE_TEXT,
-                    10,
-                    ['nullable' => false],
-                    'Pincode'
+                    'pincode_id',
+                    Table::TYPE_INTEGER,
+                    null,
+                    ['unsigned' => true, 'nullable' => false],
+                    'Pincode ID'
                 )
                 ->addColumn(
                     'day_of_week',
@@ -50,17 +48,24 @@ class AddDeliverySlots implements SchemaPatchInterface
                 )
                 ->addColumn(
                     'time_from',
-                    Table::TYPE_DATETIME,
+                    Table::TYPE_TEXT,
                     null,
                     ['nullable' => false],
                     'Start Time'
                 )
                 ->addColumn(
                     'time_to',
-                    Table::TYPE_DATETIME,
+                    Table::TYPE_TEXT,
                     null,
                     ['nullable' => false],
                     'End Time'
+                )
+                ->addColumn(
+                    'is_available',
+                    Table::TYPE_SMALLINT,
+                    null,
+                    ['nullable' => false, 'default' => 1],
+                    'Availability Flag'
                 )
                 ->addColumn(
                     'max_orders',
@@ -76,14 +81,19 @@ class AddDeliverySlots implements SchemaPatchInterface
                     ['nullable' => false, 'default' => 0],
                     'Current Orders'
                 )
-                ->addColumn(
-                    'is_active',
-                    Table::TYPE_SMALLINT,
-                    null,
-                    ['nullable' => false, 'default' => 1],
-                    'Is Active'
+                ->addForeignKey(
+                    $this->moduleDataSetup->getFKName(
+                        $tableName,
+                        'pincode_id',
+                        'domus_delivery_pincode',
+                        'entity_id'
+                    ),
+                    'pincode_id',
+                    $this->moduleDataSetup->getTable('domus_delivery_pincode'),
+                    'entity_id',
+                    Table::ACTION_CASCADE
                 )
-                ->setComment('Delivery Slots Table');
+                ->setComment('Delivery Schedule Table');
 
             $connection->createTable($table);
         }
@@ -91,12 +101,12 @@ class AddDeliverySlots implements SchemaPatchInterface
         $this->moduleDataSetup->getConnection()->endSetup();
     }
 
-    public static function getDependencies()
+    public static function getDependencies(): array
     {
         return [];
     }
 
-    public function getAliases()
+    public function getAliases(): array
     {
         return [];
     }

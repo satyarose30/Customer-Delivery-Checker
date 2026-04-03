@@ -92,5 +92,37 @@
             "PRIMARY": true,
             "DOMUS_DELIVERY_SCHEDULE_PINCODE_ID": true
         }
+    },
+    "domus_express_delivery_analytics": {
+        "column": {
+            "entity_id": true,
+            "pincode": true,
+            "delivery_type": true,
+            "created_at": true
+        },
+        "index": {
+            "DOMUS_EXPRESS_ANALYTICS_PINCODE": true,
+            "DOMUS_EXPRESS_ANALYTICS_TYPE": true,
+            "DOMUS_EXPRESS_ANALYTICS_CREATED_AT": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "domus_delivery_revenue": {
+        "column": {
+            "id": true,
+            "delivery_type": true,
+            "revenue": true,
+            "order_id": true,
+            "created_at": true
+        },
+        "index": {
+            "DOMUS_DELIVERY_REVENUE_TYPE": true,
+            "DOMUS_DELIVERY_REVENUE_CREATED_AT": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
     }
 }

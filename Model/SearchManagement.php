@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Domus\CustomerDeliveryChecker\Model;
 
+use Domus\CustomerDeliveryChecker\Api\Data\SearchResultInterface;
 use Domus\CustomerDeliveryChecker\Api\SearchManagementInterface;
 use Domus\CustomerDeliveryChecker\Api\Data\SearchResultInterfaceFactory;
 use Domus\CustomerDeliveryChecker\Model\ResourceModel\Pincode\CollectionFactory as PincodeCollectionFactory;
@@ -19,7 +20,7 @@ class SearchManagement implements SearchManagementInterface
     /**
      * @inheritdoc
      */
-    public function searchPincodes($query)
+    public function searchPincodes(string $query): SearchResultInterface
     {
         $result = $this->searchResultFactory->create();
         $query = trim((string)$query);
@@ -49,7 +50,7 @@ class SearchManagement implements SearchManagementInterface
     /**
      * @inheritdoc
      */
-    public function autocomplete($query)
+    public function autocomplete(string $query): SearchResultInterface
     {
         return $this->searchPincodes($query);
     }

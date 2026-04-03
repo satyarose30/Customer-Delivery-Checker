@@ -9,6 +9,7 @@ use Magento\Framework\Controller\Result\JsonFactory;
 use Domus\CustomerDeliveryChecker\Model\ResourceModel\Pincode\CollectionFactory as PincodeCollectionFactory;
 use Domus\CustomerDeliveryChecker\Model\Source\DeliverySlots;
 use Domus\CustomerDeliveryChecker\Model\Prediction\ETACalculator;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class TimeSlots
@@ -40,6 +41,11 @@ class TimeSlots implements HttpGetActionInterface
      * @var ETACalculator
      */
     private ETACalculator $etaCalculator;
+    
+    /**
+     * @var LoggerInterface
+     */
+    private LoggerInterface $logger;
 
     /**
      * TimeSlots constructor.
@@ -49,19 +55,22 @@ class TimeSlots implements HttpGetActionInterface
      * @param DeliverySlots $deliverySlots
      * @param PincodeCollectionFactory $pincodeCollectionFactory
      * @param ETACalculator $etaCalculator
+     * @param LoggerInterface $logger
      */
     public function __construct(
         JsonFactory $resultJsonFactory,
         HttpRequest $request,
         DeliverySlots $deliverySlots,
         PincodeCollectionFactory $pincodeCollectionFactory,
-        ETACalculator $etaCalculator
+        ETACalculator $etaCalculator,
+        LoggerInterface $logger
     ) {
         $this->resultJsonFactory = $resultJsonFactory;
         $this->request = $request;
         $this->deliverySlots = $deliverySlots;
         $this->pincodeCollectionFactory = $pincodeCollectionFactory;
         $this->etaCalculator = $etaCalculator;
+        $this->logger = $logger;
     }
 
     /**
@@ -106,7 +115,7 @@ class TimeSlots implements HttpGetActionInterface
                 $timeRange = $timeRanges[$slotValue] ?? null;
                 
                 // Check if slot is available for this date
-                $isAvailable = $this->isSlotAvailable($slotValue, $date, $pincode);
+                $isAvailable = $this->isSlotAvailable($slotValue, $date);
                 
                 if ($isAvailable) {
                     $availableSlots[] = [
@@ -126,6 +135,7 @@ class TimeSlots implements HttpGetActionInterface
             ]);
 
         } catch (\Exception $e) {
+            $this->logger->error('Time slot fetch failed', ['exception' => $e]);
             return $result->setData([
                 'success' => false,
                 'message' => __('An error occurred while fetching time slots')
@@ -138,10 +148,9 @@ class TimeSlots implements HttpGetActionInterface
      *
      * @param string $slot
      * @param string $date
-     * @param string $pincode
      * @return bool
      */
-    private function isSlotAvailable(string $slot, string $date, string $pincode): bool
+    private function isSlotAvailable(string $slot, string $date): bool
     {
         // Check delivery capacity for the slot
         // Check if it's a holiday
