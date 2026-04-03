@@ -8,6 +8,7 @@ use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Domus\CustomerDeliveryChecker\Model\ResourceModel\Pincode\CollectionFactory as PincodeCollectionFactory;
 use Domus\CustomerDeliveryChecker\Model\Source\DeliverySlots;
+use Domus\CustomerDeliveryChecker\Model\Prediction\ETACalculator;
 
 /**
  * Class TimeSlots
@@ -34,6 +35,11 @@ class TimeSlots implements HttpGetActionInterface
      * @var PincodeCollectionFactory
      */
     private PincodeCollectionFactory $pincodeCollectionFactory;
+    
+    /**
+     * @var ETACalculator
+     */
+    private ETACalculator $etaCalculator;
 
     /**
      * TimeSlots constructor.
@@ -42,17 +48,20 @@ class TimeSlots implements HttpGetActionInterface
      * @param HttpRequest $request
      * @param DeliverySlots $deliverySlots
      * @param PincodeCollectionFactory $pincodeCollectionFactory
+     * @param ETACalculator $etaCalculator
      */
     public function __construct(
         JsonFactory $resultJsonFactory,
         HttpRequest $request,
         DeliverySlots $deliverySlots,
-        PincodeCollectionFactory $pincodeCollectionFactory
+        PincodeCollectionFactory $pincodeCollectionFactory,
+        ETACalculator $etaCalculator
     ) {
         $this->resultJsonFactory = $resultJsonFactory;
         $this->request = $request;
         $this->deliverySlots = $deliverySlots;
         $this->pincodeCollectionFactory = $pincodeCollectionFactory;
+        $this->etaCalculator = $etaCalculator;
     }
 
     /**
@@ -159,10 +168,6 @@ class TimeSlots implements HttpGetActionInterface
      */
     private function getEstimatedTime(string $pincode, string $slot, string $date): string
     {
-        // Use ETACalculator for accurate prediction
-        $etaCalculator = \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Domus\CustomerDeliveryChecker\Model\Prediction\ETACalculator::class);
-        
-        return $etaCalculator->predictETABySlot($pincode, $slot, $date);
+        return $this->etaCalculator->predictETABySlot($pincode, $slot, $date);
     }
 }

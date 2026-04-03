@@ -24,7 +24,7 @@ class PincodeCheckerService implements PincodeCheckerInterface
     private const XML_PATH_ENABLED = 'customer_delivery_checker/general/enabled';
     private const XML_PATH_NOT_AVAILABLE_MSG = 'customer_delivery_checker/display/failure_message';
     private const XML_PATH_AVAILABLE_MSG = 'customer_delivery_checker/display/success_message';
-    private const XML_PATH_COD_MSG = 'domus/customer_delivery_checker/messages/cod_available';
+    private const XML_PATH_COD_MSG = 'customer_delivery_checker/messages/cod_available';
 
     private const DAYS_MAP = [
         'monday' => 'Mon',

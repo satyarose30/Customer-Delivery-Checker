@@ -28,32 +28,60 @@ class AddDeliverySlots implements SchemaPatchInterface
         if (!$connection->isTableExists($tableName)) {
             $table = $connection->newTable($tableName)
                 ->addColumn(
-                    'slot_id',
+                    'entity_id',
                     Table::TYPE_INTEGER,
                     null,
                     ['identity' => true, 'nullable' => false, 'primary' => true],
-                    'Slot ID'
+                    'Entity ID'
                 )
                 ->addColumn(
                     'pincode',
                     Table::TYPE_TEXT,
-                    255,
+                    10,
                     ['nullable' => false],
                     'Pincode'
                 )
                 ->addColumn(
-                    'start_time',
+                    'day_of_week',
                     Table::TYPE_TEXT,
-                    50,
+                    20,
+                    ['nullable' => false],
+                    'Day of Week'
+                )
+                ->addColumn(
+                    'time_from',
+                    Table::TYPE_DATETIME,
+                    null,
                     ['nullable' => false],
                     'Start Time'
                 )
                 ->addColumn(
-                    'end_time',
-                    Table::TYPE_TEXT,
-                    50,
+                    'time_to',
+                    Table::TYPE_DATETIME,
+                    null,
                     ['nullable' => false],
                     'End Time'
+                )
+                ->addColumn(
+                    'max_orders',
+                    Table::TYPE_INTEGER,
+                    null,
+                    ['nullable' => true],
+                    'Maximum Orders'
+                )
+                ->addColumn(
+                    'current_orders',
+                    Table::TYPE_INTEGER,
+                    null,
+                    ['nullable' => false, 'default' => 0],
+                    'Current Orders'
+                )
+                ->addColumn(
+                    'is_active',
+                    Table::TYPE_SMALLINT,
+                    null,
+                    ['nullable' => false, 'default' => 1],
+                    'Is Active'
                 )
                 ->setComment('Delivery Slots Table');
 
