@@ -21,6 +21,9 @@
     <preference for="Domus\CustomerDeliveryChecker\Api\Data\DeliveryScheduleInterface"
                 type="Domus\CustomerDeliveryChecker\Model\DeliverySchedule"/>
 
+    <preference for="Domus\CustomerDeliveryChecker\Api\Data\DeliveryScheduleSearchResultsInterface"
+                type="Domus\CustomerDeliveryChecker\Model\DeliveryScheduleSearchResults"/>
+
     <!-- ✅ FIXED (IMPORTANT) -->
     <preference for="Domus\CustomerDeliveryChecker\Api\Data\ETAResultInterface"
                 type="Domus\CustomerDeliveryChecker\Model\Data\ETAResult"/>
