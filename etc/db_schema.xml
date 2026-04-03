@@ -4,9 +4,11 @@
     <table name="domus_delivery_pincode" resource="default" engine="innodb" comment="Delivery Pincode Table">
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>
         <column xsi:type="varchar" name="pincode" length="10" nullable="false" comment="Pincode"/>
+        <column xsi:type="varchar" name="country_id" length="10" nullable="true" comment="Country Code"/>
         <column xsi:type="varchar" name="city" length="100" nullable="true" comment="City"/>
         <column xsi:type="varchar" name="state" length="100" nullable="true" comment="State"/>
-        <column xsi:type="varchar" name="country" length="10" nullable="true" comment="Country Code"/>
+        <column xsi:type="varchar" name="area_name" length="255" nullable="true" comment="Area/Locality Name"/>
+        <column xsi:type="varchar" name="country" length="10" nullable="true" comment="Legacy Country Code"/>
         <column xsi:type="smallint" name="estimated_days" nullable="true" comment="Estimated Delivery Days"/>
         <column xsi:type="smallint" name="cod_available" nullable="false" default="1" comment="Cash on Delivery Available"/>
         <column xsi:type="text" name="message" nullable="true" comment="Custom Message"/>
@@ -19,6 +21,16 @@
         <column xsi:type="decimal" name="longitude" scale="6" precision="10" nullable="true" comment="Longitude"/>
         <column xsi:type="smallint" name="is_deliverable" nullable="false" default="1" comment="Is Deliverable"/>
         <column xsi:type="smallint" name="is_cod_available" nullable="false" default="0" comment="Is COD Available"/>
+        <column xsi:type="smallint" name="estimated_delivery_days" nullable="true" comment="Estimated Delivery Days"/>
+        <column xsi:type="decimal" name="shipping_charge" scale="2" precision="12" nullable="true" comment="Shipping Charge"/>
+        <column xsi:type="decimal" name="cod_charge" scale="2" precision="12" nullable="true" comment="COD Additional Charge"/>
+        <column xsi:type="decimal" name="weight_from" scale="4" precision="12" nullable="true" comment="Weight From (kg)"/>
+        <column xsi:type="decimal" name="weight_to" scale="4" precision="12" nullable="true" comment="Weight To (kg)"/>
+        <column xsi:type="decimal" name="price_from" scale="4" precision="12" nullable="true" comment="Price From"/>
+        <column xsi:type="decimal" name="price_to" scale="4" precision="12" nullable="true" comment="Price To"/>
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="true" comment="Store View ID"/>
+        <column xsi:type="int" name="customer_group_id" nullable="true" comment="Customer Group ID"/>
+        <column xsi:type="int" name="priority" nullable="false" default="0" comment="Rule Priority"/>
         <column xsi:type="timestamp" name="created_at" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At"/>
         <column xsi:type="timestamp" name="updated_at" nullable="false" default="CURRENT_TIMESTAMP" on_update="CURRENT_TIMESTAMP" comment="Updated At"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
@@ -27,8 +39,33 @@
         <constraint xsi:type="unique" referenceId="UNIQUE_PINCODE">
             <column name="pincode"/>
         </constraint>
+        <index referenceId="DOMUS_DELIVERY_PINCODE_PINCODE" indexType="btree">
+            <column name="pincode"/>
+        </index>
+        <index referenceId="DOMUS_DELIVERY_PINCODE_COUNTRY" indexType="btree">
+            <column name="country_id"/>
+        </index>
         <index referenceId="DOMUS_PINCODE_IS_ACTIVE" indexType="btree">
             <column name="is_active"/>
+        </index>
+        <index referenceId="DOMUS_DELIVERY_PINCODE_ACTIVE" indexType="btree">
+            <column name="is_active"/>
+        </index>
+        <index referenceId="DOMUS_DELIVERY_PINCODE_DELIVERABLE" indexType="btree">
+            <column name="is_deliverable"/>
+        </index>
+        <index referenceId="DOMUS_DELIVERY_PINCODE_PINCODE_COUNTRY" indexType="btree">
+            <column name="pincode"/>
+            <column name="country_id"/>
+        </index>
+        <index referenceId="DOMUS_DELIVERY_PINCODE_STORE_ID" indexType="btree">
+            <column name="store_id"/>
+        </index>
+        <index referenceId="DOMUS_DELIVERY_PINCODE_CUSTOMER_GROUP" indexType="btree">
+            <column name="customer_group_id"/>
+        </index>
+        <index referenceId="DOMUS_DELIVERY_PINCODE_PRIORITY" indexType="btree">
+            <column name="priority"/>
         </index>
         <index referenceId="DOMUS_PINCODE_CITY" indexType="btree">
             <column name="city"/>
@@ -45,12 +82,16 @@
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
         </constraint>
-        <constraint xsi:type="foreign" referenceId="DOMUS_PINCODE_CATEGORY_PINCODE_ID" table="domus_delivery_pincode_category" column="pincode_id" referenceTable="domus_delivery_pincode" referenceColumn="entity_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" referenceId="DOMUS_PINCODE_CATEGORY_CATEGORY_ID" table="domus_delivery_pincode_category" column="category_id" referenceTable="catalog_category_entity" referenceColumn="entity_id" onDelete="CASCADE"/>
-        <index referenceId="DOMUS_PINCODE_CATEGORY_PINCODE_ID" indexType="btree">
+        <constraint xsi:type="unique" referenceId="DOMUS_PINCODE_CAT_UNIQUE">
+            <column name="pincode_id"/>
+            <column name="category_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="DOMUS_PINCODE_CAT_PINCODE_ID" table="domus_delivery_pincode_category" column="pincode_id" referenceTable="domus_delivery_pincode" referenceColumn="entity_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="DOMUS_PINCODE_CAT_CATEGORY_ID" table="domus_delivery_pincode_category" column="category_id" referenceTable="catalog_category_entity" referenceColumn="entity_id" onDelete="CASCADE"/>
+        <index referenceId="DOMUS_PINCODE_CAT_PINCODE_ID" indexType="btree">
             <column name="pincode_id"/>
         </index>
-        <index referenceId="DOMUS_PINCODE_CATEGORY_CATEGORY_ID" indexType="btree">
+        <index referenceId="DOMUS_PINCODE_CAT_CATEGORY_ID" indexType="btree">
             <column name="category_id"/>
         </index>
     </table>
@@ -81,16 +122,41 @@
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
         </constraint>
-        <constraint xsi:type="foreign" referenceId="DOMUS_PINCODE_PRODUCT_PINCODE_ID" table="domus_delivery_pincode_product" column="pincode_id" referenceTable="domus_delivery_pincode" referenceColumn="entity_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" referenceId="DOMUS_PINCODE_PRODUCT_PRODUCT_ID" table="domus_delivery_pincode_product" column="product_id" referenceTable="catalog_product_entity" referenceColumn="entity_id" onDelete="CASCADE"/>
-        <index referenceId="DOMUS_PINCODE_PRODUCT_PINCODE_ID" indexType="btree">
+        <constraint xsi:type="unique" referenceId="DOMUS_PINCODE_PROD_UNIQUE">
+            <column name="pincode_id"/>
+            <column name="product_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="DOMUS_PINCODE_PROD_PINCODE_ID" table="domus_delivery_pincode_product" column="pincode_id" referenceTable="domus_delivery_pincode" referenceColumn="entity_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="DOMUS_PINCODE_PROD_PRODUCT_ID" table="domus_delivery_pincode_product" column="product_id" referenceTable="catalog_product_entity" referenceColumn="entity_id" onDelete="CASCADE"/>
+        <index referenceId="DOMUS_PINCODE_PROD_PINCODE_ID" indexType="btree">
             <column name="pincode_id"/>
         </index>
-        <index referenceId="DOMUS_PINCODE_PRODUCT_PRODUCT_ID" indexType="btree">
+        <index referenceId="DOMUS_PINCODE_PROD_PRODUCT_ID" indexType="btree">
             <column name="product_id"/>
         </index>
     </table>
-    
+
+    <table name="domus_delivery_schedule" resource="default" engine="innodb" comment="Delivery Schedule Table">
+        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>
+        <column xsi:type="int" name="pincode_id" padding="10" unsigned="true" nullable="false" comment="Pincode ID"/>
+        <column xsi:type="varchar" name="day_of_week" length="20" nullable="false" comment="Day of Week"/>
+        <column xsi:type="varchar" name="time_from" length="10" nullable="false" comment="Start Time"/>
+        <column xsi:type="varchar" name="time_to" length="10" nullable="false" comment="End Time"/>
+        <column xsi:type="smallint" name="is_available" nullable="false" default="1" comment="Availability Flag"/>
+        <column xsi:type="int" name="max_orders" nullable="true" comment="Maximum Orders"/>
+        <column xsi:type="int" name="current_orders" nullable="false" default="0" comment="Current Orders"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="DOMUS_DELIVERY_SCHEDULE_PINCODE_ID" table="domus_delivery_schedule" column="pincode_id" referenceTable="domus_delivery_pincode" referenceColumn="entity_id" onDelete="CASCADE"/>
+        <index referenceId="DOMUS_DELIVERY_SCHEDULE_PINCODE_ID" indexType="btree">
+            <column name="pincode_id"/>
+        </index>
+        <index referenceId="DOMUS_DELIVERY_SCHEDULE_DAY" indexType="btree">
+            <column name="day_of_week"/>
+        </index>
+    </table>
+
     <table name="domus_delivery_slots" resource="default" engine="innodb" comment="Delivery Time Slots Table">
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>
         <column xsi:type="varchar" name="pincode" length="10" nullable="false" comment="Pincode"/>

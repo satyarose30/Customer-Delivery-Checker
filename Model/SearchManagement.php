@@ -1,20 +1,19 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Domus\CustomerDeliveryChecker\Model;
 
 use Domus\CustomerDeliveryChecker\Api\SearchManagementInterface;
 use Domus\CustomerDeliveryChecker\Api\Data\SearchResultInterfaceFactory;
+use Domus\CustomerDeliveryChecker\Model\ResourceModel\Pincode\CollectionFactory as PincodeCollectionFactory;
 
 class SearchManagement implements SearchManagementInterface
 {
-    /**
-     * @var SearchResultInterfaceFactory
-     */
-    private $searchResultFactory;
-
     public function __construct(
-        SearchResultInterfaceFactory $searchResultFactory
+        private readonly SearchResultInterfaceFactory $searchResultFactory,
+        private readonly PincodeCollectionFactory $pincodeCollectionFactory
     ) {
-        $this->searchResultFactory = $searchResultFactory;
     }
 
     /**
@@ -23,11 +22,35 @@ class SearchManagement implements SearchManagementInterface
     public function searchPincodes($query)
     {
         $result = $this->searchResultFactory->create();
-        $result->setItems([]);
-        $result->setTotalCount(0);
+        $query = trim((string)$query);
+        if ($query === '') {
+            $result->setItems([]);
+            $result->setTotalCount(0);
+            return $result;
+        }
 
-        // TODO: Elasticsearch / OpenSearch query for pincodes
-        
+        $collection = $this->pincodeCollectionFactory->create();
+        $collection->addFieldToFilter('is_active', 1);
+        $collection->addFieldToFilter(
+            ['pincode', 'city', 'state'],
+            [
+                ['like' => $query . '%'],
+                ['like' => '%' . $query . '%'],
+                ['like' => '%' . $query . '%']
+            ]
+        );
+        $collection->setPageSize(10)->setCurPage(1);
+
+        $result->setItems($collection->getItems());
+        $result->setTotalCount((int)$collection->getSize());
         return $result;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function autocomplete($query)
+    {
+        return $this->searchPincodes($query);
     }
 }

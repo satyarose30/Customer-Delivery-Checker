@@ -61,10 +61,10 @@ define([
             this.isLoading(true);
 
             var url = window.BASE_URL
-                ? window.BASE_URL + 'rest/V1/domus/pincode/check'
-                : '/rest/V1/domus/pincode/check';
+                ? window.BASE_URL + 'domus/rest/check'
+                : '/domus/rest/check';
             url += '?pincode=' + encodeURIComponent(pincode) +
-                   '&countryId=' + encodeURIComponent(countryId || 'IN');
+                   '&country_id=' + encodeURIComponent(countryId || 'IN');
 
             storage.get(url, undefined, true)
                 .done(function (response) {

@@ -36,6 +36,8 @@
                                                                         <item name="template" xsi:type="string">
                                                                             Domus_CustomerDeliveryChecker/checkout/pincode-checker
                                                                         </item>
+                                                                        <item name="checkUrl" xsi:type="url" path="domus/rest/check"/>
+                                                                        <item name="defaultCountry" xsi:type="string">IN</item>
                                                                     </item>
                                                                 </item>
                                                             </item>

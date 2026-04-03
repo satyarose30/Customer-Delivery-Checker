@@ -85,7 +85,7 @@ define([
 
         performCheck: function (pincode) {
             var url = this.checkUrl + '?pincode=' + encodeURIComponent(pincode) +
-                      '&countryId=' + encodeURIComponent(this.defaultCountry);
+                      '&country_id=' + encodeURIComponent(this.defaultCountry);
             return storage.get(url, undefined, true);
         },
 
