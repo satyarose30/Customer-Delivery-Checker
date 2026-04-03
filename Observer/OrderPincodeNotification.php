@@ -14,10 +14,10 @@ use Domus\CustomerDeliveryChecker\Model\PincodeCheckerService;
 
 class OrderPincodeNotification implements ObserverInterface
 {
-    private const XML_PATH_SMS_ENABLED = 'domus/customer_delivery_checker/notifications/sms_enabled';
-    private const XML_PATH_EMAIL_ENABLED = 'domus/customer_delivery_checker/notifications/email_enabled';
-    private const XML_PATH_SMS_TEMPLATE = 'domus/customer_delivery_checker/notifications/sms_template';
-    private const XML_PATH_EMAIL_TEMPLATE = 'domus/customer_delivery_checker/notifications/email_template';
+    private const XML_PATH_SMS_ENABLED = 'customer_delivery_checker/notifications/sms_enabled';
+    private const XML_PATH_EMAIL_ENABLED = 'customer_delivery_checker/notifications/email_enabled';
+    private const XML_PATH_SMS_TEMPLATE = 'customer_delivery_checker/notifications/sms_template';
+    private const XML_PATH_EMAIL_TEMPLATE = 'customer_delivery_checker/notifications/email_template';
 
     public function __construct(
         private readonly ScopeConfigInterface $scopeConfig,
