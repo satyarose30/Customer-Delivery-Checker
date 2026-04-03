@@ -6,9 +6,6 @@ namespace Domus\CustomerDeliveryChecker\Controller\Rest;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Controller\Result\JsonFactory;
-use Magento\Framework\Serialize\Serializer\Json as JsonSerializer;
-use Domus\CustomerDeliveryChecker\Model\ResourceModel\Pincode\CollectionFactory as PincodeCollectionFactory;
-use Domus\CustomerDeliveryChecker\Model\ResourceModel\Pincode\Collection;
 use Domus\CustomerDeliveryChecker\Model\PincodeManagement;
 use Domus\CustomerDeliveryChecker\Model\Cache\RedisPincodeCache;
 use Psr\Log\LoggerInterface;
@@ -23,16 +20,6 @@ class Check implements HttpGetActionInterface
      * @var JsonFactory
      */
     private JsonFactory $resultJsonFactory;
-    
-    /**
-     * @var JsonSerializer
-     */
-    private JsonSerializer $jsonSerializer;
-    
-    /**
-     * @var PincodeCollectionFactory
-     */
-    private PincodeCollectionFactory $pincodeCollectionFactory;
     
     /**
      * @var HttpRequest
@@ -58,8 +45,6 @@ class Check implements HttpGetActionInterface
      * Check constructor.
      *
      * @param JsonFactory $resultJsonFactory
-     * @param JsonSerializer $jsonSerializer
-     * @param PincodeCollectionFactory $pincodeCollectionFactory
      * @param HttpRequest $request
      * @param PincodeManagement $pincodeManagement
      * @param RedisPincodeCache $cache
@@ -67,16 +52,12 @@ class Check implements HttpGetActionInterface
      */
     public function __construct(
         JsonFactory $resultJsonFactory,
-        JsonSerializer $jsonSerializer,
-        PincodeCollectionFactory $pincodeCollectionFactory,
         HttpRequest $request,
         PincodeManagement $pincodeManagement,
         RedisPincodeCache $cache,
         LoggerInterface $logger
     ) {
         $this->resultJsonFactory = $resultJsonFactory;
-        $this->jsonSerializer = $jsonSerializer;
-        $this->pincodeCollectionFactory = $pincodeCollectionFactory;
         $this->request = $request;
         $this->pincodeManagement = $pincodeManagement;
         $this->cache = $cache;
@@ -93,12 +74,14 @@ class Check implements HttpGetActionInterface
         $result = $this->resultJsonFactory->create();
         
         try {
-            $pincode = $this->request->getParam('pincode');
-            $countryId = $this->request->getParam('country_id', 'IN');
+            $pincode = trim((string)$this->request->getParam('pincode'));
+            $countryId = trim((string)$this->request->getParam('country_id', 'IN'));
             $productId = $this->request->getParam('product_id');
             $categoryId = $this->request->getParam('category_id');
-            $cartWeight = $this->request->getParam('cart_weight') ? (float)$this->request->getParam('cart_weight') : null;
-            $cartValue = $this->request->getParam('cart_value') ? (float)$this->request->getParam('cart_value') : null;
+            $cartWeightParam = $this->request->getParam('cart_weight');
+            $cartValueParam = $this->request->getParam('cart_value');
+            $cartWeight = $cartWeightParam !== null && $cartWeightParam !== '' ? (float)$cartWeightParam : null;
+            $cartValue = $cartValueParam !== null && $cartValueParam !== '' ? (float)$cartValueParam : null;
             
             if (!$pincode) {
                 return $result->setData([
@@ -129,6 +112,7 @@ class Check implements HttpGetActionInterface
             
             return $result->setData($responseData);
             
+        } catch (\Throwable $e) {
         } catch (\Exception $e) {
             $this->logger->error('Pincode check failed', ['exception' => $e]);
             return $result->setData([

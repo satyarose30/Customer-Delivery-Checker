@@ -65,8 +65,8 @@ class Express implements HttpGetActionInterface
         $result = $this->resultJsonFactory->create();
         
         try {
-            $pincode = $this->request->getParam('pincode');
-            $orderValue = $this->request->getParam('order_value', 0);
+            $pincode = trim((string)$this->request->getParam('pincode'));
+            $orderValue = (float)$this->request->getParam('order_value', 0);
             
             if (!$pincode) {
                 return $result->setData([
@@ -100,6 +100,7 @@ class Express implements HttpGetActionInterface
                 'express_options' => $expressOptions
             ]);
 
+        } catch (\Throwable $e) {
         } catch (\Exception $e) {
             $this->logger->error('Express options fetch failed', ['exception' => $e]);
             return $result->setData([

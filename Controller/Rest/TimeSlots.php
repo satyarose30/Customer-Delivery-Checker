@@ -83,8 +83,8 @@ class TimeSlots implements HttpGetActionInterface
         $result = $this->resultJsonFactory->create();
         
         try {
-            $pincode = $this->request->getParam('pincode');
-            $date = $this->request->getParam('date', date('Y-m-d'));
+            $pincode = trim((string)$this->request->getParam('pincode'));
+            $date = (string)$this->request->getParam('date', date('Y-m-d'));
             
             if (!$pincode) {
                 return $result->setData([
@@ -134,6 +134,7 @@ class TimeSlots implements HttpGetActionInterface
                 'available_slots' => $availableSlots
             ]);
 
+        } catch (\Throwable $e) {
         } catch (\Exception $e) {
             $this->logger->error('Time slot fetch failed', ['exception' => $e]);
             return $result->setData([
@@ -161,7 +162,7 @@ class TimeSlots implements HttpGetActionInterface
         
         if (date('Y-m-d') === $date && $currentHour >= $cutOffTime) {
             // If current time is past cutoff, disable some slots for today
-            return in_array($slot, ['evening', 'night', 'early_morning']);
+            return in_array($slot, ['evening', 'night', 'early_morning'], true);
         }
         
         return true;
