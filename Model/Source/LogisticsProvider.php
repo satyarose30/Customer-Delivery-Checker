@@ -14,7 +14,8 @@ class LogisticsProvider implements OptionSourceInterface
     {
         return [
             ['value' => 'manual', 'label' => __('Manual/Internal Rules Only')],
-            ['value' => 'shiprocket', 'label' => __('Shiprocket Integration')]
+            ['value' => 'shiprocket', 'label' => __('Shiprocket Integration')],
+            ['value' => 'third_party', 'label' => __('Third-party Logistics')]
         ];
     }
 }
