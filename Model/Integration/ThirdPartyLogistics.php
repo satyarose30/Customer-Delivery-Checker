@@ -12,9 +12,18 @@ class ThirdPartyLogistics
      */
     public function checkServiceability($pincode, $serviceCode)
     {
-        // TODO: Call third party logistics implementation
+        if (!$pincode || !$serviceCode) {
+            return [
+                'is_serviceable' => false,
+                'message' => 'Pincode and service code are required'
+            ];
+        }
+
+        // Placeholder behavior until provider integration is implemented.
+        // Fail-safe false prevents over-promising deliverability.
         return [
-            'is_serviceable' => true
+            'is_serviceable' => false,
+            'message' => 'Third-party logistics provider is not configured'
         ];
     }
 }
