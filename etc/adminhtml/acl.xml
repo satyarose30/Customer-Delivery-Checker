@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<acl xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/acl.xsd">
+
+    <resources>
+        <resource id="Magento_Backend::admin">
+
+            <!-- Config Permission -->
+            <resource id="Magento_Backend::stores">
+                <resource id="Magento_Backend::stores_settings">
+                    <resource id="Magento_Config::config">
+                        <resource id="Domus_CustomerDeliveryChecker::config"
+                                  title="Customer Delivery Checker"
+                                  sortOrder="100"/>
+                    </resource>
+                </resource>
+            </resource>
+
+            <!-- Main Module Permission -->
+            <resource id="Domus_CustomerDeliveryChecker::main"
+                      title="Delivery Checker"
+                      sortOrder="500">
+
+                <resource id="Domus_CustomerDeliveryChecker::manage"
+                          title="Manage Pincodes"
+                          sortOrder="10">
+
+                    <resource id="Domus_CustomerDeliveryChecker::dashboard"
+                              title="Analytics Dashboard"
+                              sortOrder="5"/>
+
+                    <resource id="Domus_CustomerDeliveryChecker::pincode_save"
+                              title="Save Pincode"
+                              sortOrder="10"/>
+
+                    <resource id="Domus_CustomerDeliveryChecker::pincode_delete"
+                              title="Delete Pincode"
+                              sortOrder="20"/>
+
+                    <resource id="Domus_CustomerDeliveryChecker::pincode_export"
+                              title="Export Pincodes"
+                              sortOrder="30"/>
+
+                    <resource id="Domus_CustomerDeliveryChecker::pincode_import"
+                              title="Import Pincodes"
+                              sortOrder="40"/>
+
+                </resource>
+
+            </resource>
+
+        </resource>
+    </resources>
+</acl>

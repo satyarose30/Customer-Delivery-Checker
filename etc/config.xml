@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <carriers>
+            <domus_pincode>
+                <active>0</active>
+                <title>Pincode Delivery</title>
+                <name>Pincode Based Shipping</name>
+                <default_price>50</default_price>
+                <free_shipping_enabled>0</free_shipping_enabled>
+                <free_shipping_minimum>500</free_shipping_minimum>
+                <sort_order>10</sort_order>
+                <model>Domus\CustomerDeliveryChecker\Model\Carrier\PincodeShipping</model>
+            </domus_pincode>
+        </carriers>
+        <customer_delivery_checker>
+            <general>
+                <enabled>1</enabled>
+                <google_maps_api_key></google_maps_api_key>
+                <show_on_product_page>1</show_on_product_page>
+                <show_on_checkout>1</show_on_checkout>
+                <default_country>IN</default_country>
+                <pincode_input_label>Enter your Pincode</pincode_input_label>
+                <check_button_text>Check</check_button_text>
+                <change_button_text>Change</change_button_text>
+                <pincode_range_support>0</pincode_range_support>
+                <show_warranty>1</show_warranty>
+                <show_time_slots>1</show_time_slots>
+                <show_express>1</show_express>
+            </general>
+            <advanced>
+                <enable_geolocation>0</enable_geolocation>
+                <enable_date_picker>0</enable_date_picker>
+                <check_weight>1</check_weight>
+                <check_price>1</check_price>
+                <check_customergroup>1</check_customergroup>
+                <enable_google_maps>0</enable_google_maps>
+                <google_maps_api_key></google_maps_api_key>
+                <enable_autocomplete>1</enable_autocomplete>
+            </advanced>
+            <cache>
+                <enable_cache>1</enable_cache>
+                <cache_ttl>3600</cache_ttl>
+                <redis_enabled>1</redis_enabled>
+            </cache>
+            <messages>
+                <available>Delivery available to this pincode!</available>
+                <not_available>Sorry, delivery is not available to this pincode.</not_available>
+                <cod_available>Cash on Delivery is available.</cod_available>
+                <category_restricted>Delivery not available for this product category.</category_restricted>
+                <weight_restricted>Cart weight exceeds delivery limit for this pincode.</weight_restricted>
+                <price_restricted>Order value is below minimum for delivery.</price_restricted>
+            </messages>
+            <shipping_carrier>
+                <active>1</active>
+                <title>Pincode Delivery</title>
+                <default_price>50</default_price>
+                <free_shipping_enabled>0</free_shipping_enabled>
+                <free_shipping_minimum>500</free_shipping_minimum>
+                <sort_order>10</sort_order>
+            </shipping_carrier>
+            <notifications>
+                <sms_enabled>0</sms_enabled>
+                <email_enabled>1</email_enabled>
+                <sms_template>domus_pincode_sms_notification</sms_template>
+                <email_template>domus_pincode_email_notification</email_template>
+            </notifications>
+            <display>
+                <success_message>Delivery available to this pincode</success_message>
+                <failure_message>Delivery not available to this pincode</failure_message>
+                <loading_message>Checking availability...</loading_message>
+            </display>
+            <express>
+                <default_charge>100</default_charge>
+                <overnight_charge>200</overnight_charge>
+                <cutoff_time>16:00</cutoff_time>
+            </express>
+            <opensearch>
+                <enabled>0</enabled>
+                <hosts>localhost:9200</hosts>
+                <ssl_enabled>0</ssl_enabled>
+                <username></username>
+                <password></password>
+                <index_name>domus_delivery_pincodes</index_name>
+            </opensearch>
+            <ml_eta>
+                <enabled>1</enabled>
+                <warehouse_lat>28.6139</warehouse_lat>
+                <warehouse_lng>77.2090</warehouse_lng>
+            </ml_eta>
+        </customer_delivery_checker>
+    </default>
+</config>

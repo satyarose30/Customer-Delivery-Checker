@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Cache/etc/cache.xsd">
+
+    <type name="domus_pincode_cache"
+          translate="label,description"
+          instance="Domus\CustomerDeliveryChecker\Model\Cache\PincodeCache">
+        <label>Domus Pincode Delivery Cache</label>
+        <description>Cache storage for pincode delivery availability checks</description>
+    </type>
+
+    <type name="domus_pincode_cache_redis"
+          translate="label,description"
+          instance="Domus\CustomerDeliveryChecker\Model\Cache\RedisPincodeCache">
+        <label>Domus Pincode Redis Cache</label>
+        <description>Redis-based cache for high-performance pincode lookups</description>
+    </type>
+
+</config>

@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="customer_delivery_checker" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Delivery Pincode Checker</label>
+            <tab>customer</tab>
+            <resource>Domus_CustomerDeliveryChecker::configuration</resource>
+            
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>General Configuration</label>
+                
+                <field id="enabled" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Enable Pincode Checker</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Enable/disable the pincode checker functionality</comment>
+                </field>
+                
+                <field id="google_maps_api_key" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Google Maps API Key</label>
+                    <comment>Required for Google Places Autocomplete. Get key from Google Cloud Console.</comment>
+                </field>
+                
+                <field id="logistics_provider" translate="label comment" type="select" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Logistics Provider</label>
+                    <source_model>Domus\CustomerDeliveryChecker\Model\Source\LogisticsProvider</source_model>
+                    <comment>Choose whether to use external API (Shiprocket) or manual internal rules only.</comment>
+                </field>
+                
+                <field id="show_on_product_page" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Show on Product Page</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                
+                <field id="show_on_cart_page" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Show on Cart Page</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                
+                <field id="show_on_checkout" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Show on Checkout</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                
+                <field id="pincode_range_support" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Enable Pincode Range Support</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Allow entering pincode ranges (e.g., 110001-110010)</comment>
+                </field>
+                
+                <field id="show_warranty" translate="label comment" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Show Warranty Information</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Display warranty information along with delivery check results</comment>
+                </field>
+
+                <field id="warranty_tab_position" translate="label" type="select" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Warranty Tab Position</label>
+                    <source_model>Domus\CustomerDeliveryChecker\Model\Source\WarrantyTabPosition</source_model>
+                    <depends>
+                        <field id="show_warranty">1</field>
+                    </depends>
+                </field>
+            </group>
+            
+            <group id="cache" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Cache Settings</label>
+                
+                <field id="enable_cache" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Enable Pincode Cache</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                
+                <field id="cache_ttl" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Cache TTL (seconds)</label>
+                    <comment>Time to live for cached pincode results</comment>
+                    <validate>required-entry validate-number validate-greater-than-zero</validate>
+                    <default>3600</default>
+                </field>
+            </group>
+            
+            <group id="display" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Display Settings</label>
+                
+                <field id="success_message" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Success Message</label>
+                    <default>Delivery available to this pincode</default>
+                </field>
+                
+                <field id="failure_message" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Failure Message</label>
+                    <default>Delivery not available to this pincode</default>
+                </field>
+                
+                <field id="loading_message" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Loading Message</label>
+                    <default>Checking availability...</default>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+    <route url="/V1/delivery/pincode/:pincode/check" method="GET">
+        <service class="Domus\CustomerDeliveryChecker\Api\PincodeManagementInterface" method="checkPincode"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+        <data>
+            <parameter name="pincode" force="true">%pincode%</parameter>
+        </data>
+    </route>
+    
+    <route url="/V1/delivery/pincode/:pincode/timeslots" method="GET">
+        <service class="Domus\CustomerDeliveryChecker\Api\TimeSlotManagementInterface" method="getAvailableTimeSlots"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+    
+    <route url="/V1/delivery/pincode/:pincode/express" method="GET">
+        <service class="Domus\CustomerDeliveryChecker\Api\ExpressManagementInterface" method="getExpressOptions"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+    
+    <route url="/V1/delivery/eta/predict" method="POST">
+        <service class="Domus\CustomerDeliveryChecker\Api\ETAManagementInterface" method="calculateETA"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+    
+    <route url="/V1/delivery/track/:order_id" method="GET">
+        <service class="Domus\CustomerDeliveryChecker\Api\TrackingManagementInterface" method="trackOrder"/>
+        <resources>
+            <resource ref="self"/>
+        </resources>
+    </route>
+    
+    <route url="/V1/delivery/search/autocomplete" method="GET">
+        <service class="Domus\CustomerDeliveryChecker\Api\SearchManagementInterface" method="autocomplete"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+    
+    <route url="/V1/delivery/analytics/metrics" method="GET">
+        <service class="Domus\CustomerDeliveryChecker\Api\AnalyticsManagementInterface" method="getMetrics"/>
+        <resources>
+            <resource ref="Domus_CustomerDeliveryChecker::analytics"/>
+        </resources>
+    </route>
+</routes>

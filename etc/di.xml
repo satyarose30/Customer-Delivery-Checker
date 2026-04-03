@@ -1,0 +1,112 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <!-- Core Preferences -->
+    <preference for="Domus\CustomerDeliveryChecker\Api\PincodeManagementInterface"
+                type="Domus\CustomerDeliveryChecker\Model\PincodeManagement"/>
+
+    <preference for="Domus\CustomerDeliveryChecker\Api\Data\PincodeCheckResultInterface"
+                type="Domus\CustomerDeliveryChecker\Model\PincodeCheckResult"/>
+
+    <preference for="Domus\CustomerDeliveryChecker\Api\PincodeCheckerInterface"
+                type="Domus\CustomerDeliveryChecker\Model\PincodeCheckerService"/>
+
+    <preference for="Domus\CustomerDeliveryChecker\Api\DeliveryScheduleRepositoryInterface"
+                type="Domus\CustomerDeliveryChecker\Model\DeliveryScheduleRepository"/>
+
+    <preference for="Domus\CustomerDeliveryChecker\Api\Data\PincodeInterface"
+                type="Domus\CustomerDeliveryChecker\Model\Pincode"/>
+
+    <preference for="Domus\CustomerDeliveryChecker\Api\Data\DeliveryScheduleInterface"
+                type="Domus\CustomerDeliveryChecker\Model\DeliverySchedule"/>
+
+    <!-- ✅ FIXED (IMPORTANT) -->
+    <preference for="Domus\CustomerDeliveryChecker\Api\Data\ETAResultInterface"
+                type="Domus\CustomerDeliveryChecker\Model\Data\ETAResult"/>
+
+    <preference for="Domus\CustomerDeliveryChecker\Api\Data\ExpressResultInterface"
+                type="Domus\CustomerDeliveryChecker\Model\ExpressResult"/>
+
+    <preference for="Domus\CustomerDeliveryChecker\Api\Data\TimeSlotResultInterface"
+                type="Domus\CustomerDeliveryChecker\Model\TimeSlotResult"/>
+
+    <preference for="Domus\CustomerDeliveryChecker\Api\Data\TrackingResultInterface"
+                type="Domus\CustomerDeliveryChecker\Model\TrackingResult"/>
+
+    <!-- UI Plugin -->
+    <type name="Domus\CustomerDeliveryChecker\Ui\Component\Form\DataProvider">
+        <plugin name="domus_customerdeliverychecker_form_data"
+                type="Domus\CustomerDeliveryChecker\Plugin\Ui\DataProviderPlugin"/>
+    </type>
+
+    <!-- Checkout Layout Plugin -->
+    <type name="Magento\Checkout\Block\Checkout\LayoutProcessor">
+        <plugin name="domus_customerdeliverychecker_checkout_pincode"
+                type="Domus\CustomerDeliveryChecker\Plugin\Checkout\LayoutProcessorPlugin"/>
+    </type>
+
+    <!-- Save Pincode Plugin -->
+    <type name="Magento\Checkout\Model\ShippingInformationManagement">
+        <plugin name="domus_customerdeliverychecker_save_pincode"
+                type="Domus\CustomerDeliveryChecker\Plugin\Checkout\SavePincodePlugin"/>
+    </type>
+
+    <!-- API Bindings -->
+    <preference for="Domus\CustomerDeliveryChecker\Api\TimeSlotManagementInterface"
+                type="Domus\CustomerDeliveryChecker\Model\TimeSlotManagement"/>
+
+    <preference for="Domus\CustomerDeliveryChecker\Api\ExpressManagementInterface"
+                type="Domus\CustomerDeliveryChecker\Model\ExpressManagement"/>
+
+    <preference for="Domus\CustomerDeliveryChecker\Api\ETAManagementInterface"
+                type="Domus\CustomerDeliveryChecker\Model\ETAManagement"/>
+
+    <preference for="Domus\CustomerDeliveryChecker\Api\TrackingManagementInterface"
+                type="Domus\CustomerDeliveryChecker\Model\TrackingManagement"/>
+
+    <preference for="Domus\CustomerDeliveryChecker\Api\SearchManagementInterface"
+                type="Domus\CustomerDeliveryChecker\Model\SearchManagement"/>
+
+    <preference for="Domus\CustomerDeliveryChecker\Api\AnalyticsManagementInterface"
+                type="Domus\CustomerDeliveryChecker\Model\AnalyticsManagement"/>
+
+    <!-- Order Plugin -->
+    <type name="Magento\Sales\Api\OrderManagementInterface">
+        <plugin name="domus_customerdeliverychecker_order_placed"
+                type="Domus\CustomerDeliveryChecker\Plugin\Checkout\OrderPlacedPlugin"/>
+    </type>
+
+    <!-- Checkout Suggestion Plugin -->
+    <type name="Magento\Checkout\Block\Checkout\AttributeMerger">
+        <plugin name="domus_customerdeliverychecker_delivery_suggestion"
+                type="Domus\CustomerDeliveryChecker\Plugin\Checkout\DeliverySuggestionPlugin"/>
+    </type>
+
+    <!-- OpenSearch Plugin -->
+    <type name="Magento\CatalogSearch\Model\Search\IndexBuilder">
+        <plugin name="domus_customerdeliverychecker_opensearch"
+                type="Domus\CustomerDeliveryChecker\Plugin\Search\OpenSearchPlugin"/>
+    </type>
+
+    <!-- Pincode Plugin -->
+    <type name="Domus\CustomerDeliveryChecker\Model\PincodeManagement">
+        <plugin name="domus_customerdeliverychecker_pincode"
+                type="Domus\CustomerDeliveryChecker\Plugin\Model\PincodePlugin"/>
+    </type>
+
+    <!-- Logistics Provider Factory -->
+    <type name="Domus\CustomerDeliveryChecker\Model\Logistics\ProviderFactory">
+        <arguments>
+            <argument name="providers" xsi:type="array">
+                <item name="manual" xsi:type="string">
+                    Domus\CustomerDeliveryChecker\Model\Logistics\ManualProvider
+                </item>
+                <item name="shiprocket" xsi:type="string">
+                    Domus\CustomerDeliveryChecker\Model\Integration\Shiprocket
+                </item>
+            </argument>
+        </arguments>
+    </type>
+
+</config>

@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <customer_delivery_checker>
+            <opensearch>
+                <enabled>0</enabled>
+                <hosts>localhost:9200</hosts>
+                <ssl_enabled>0</ssl_enabled>
+                <username></username>
+                <password></password>
+                <index_name>domus_delivery_pincodes</index_name>
+            </opensearch>
+        </customer_delivery_checker>
+    </default>
+</config>

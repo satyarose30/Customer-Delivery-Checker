@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="sales_order_place_after">
+        <observer name="domus_customerdeliverychecker_log_revenue" instance="Domus\CustomerDeliveryChecker\Observer\OrderPlacedObserver" />
+    </event>
+    <event name="domus_pincode_check_success">
+        <observer name="domus_customerdeliverychecker_pincode_check" instance="Domus\CustomerDeliveryChecker\Observer\PincodeCheckObserver" />
+    </event>
+    <event name="indexer_reindex_all_invalid">
+        <observer name="domus_customerdeliverychecker_indexer" instance="Domus\CustomerDeliveryChecker\Observer\IndexerObserver" />
+    </event>
+    <event name="clean_cache_by_tags">
+        <observer name="domus_customerdeliverychecker_cache_warmup" instance="Domus\CustomerDeliveryChecker\Observer\CacheWarmupObserver" />
+    </event>
+</config>

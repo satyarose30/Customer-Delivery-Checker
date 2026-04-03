@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+
+<menu>
+
+    <!-- Main Menu -->
+    <add id="Domus_CustomerDeliveryChecker::manage"
+         title="Delivery Pincodes"
+         module="Domus_CustomerDeliveryChecker"
+         parent="Magento_Backend::content"
+         sortOrder="50"
+         resource="Domus_CustomerDeliveryChecker::manage"/>
+
+    <!-- Dashboard -->
+    <add id="Domus_CustomerDeliveryChecker::dashboard"
+         title="Analytics Dashboard"
+         module="Domus_CustomerDeliveryChecker"
+         parent="Domus_CustomerDeliveryChecker::manage"
+         action="customerdeliverychecker/dashboard/index"
+         sortOrder="5"
+         resource="Domus_CustomerDeliveryChecker::dashboard"/>
+
+    <!-- Pincode Grid -->
+    <add id="Domus_CustomerDeliveryChecker::pincode_grid"
+         title="Manage Pincodes"
+         module="Domus_CustomerDeliveryChecker"
+         parent="Domus_CustomerDeliveryChecker::manage"
+         action="customerdeliverychecker/pincode/index"
+         sortOrder="10"
+         resource="Domus_CustomerDeliveryChecker::manage"/>
+
+    <!-- Add New Pincode -->
+    <add id="Domus_CustomerDeliveryChecker::pincode_add"
+         title="Add New Pincode"
+         module="Domus_CustomerDeliveryChecker"
+         parent="Domus_CustomerDeliveryChecker::manage"
+         action="customerdeliverychecker/pincode/edit"
+         sortOrder="20"
+         resource="Domus_CustomerDeliveryChecker::manage"/>
+
+    <!-- Delivery Schedule -->
+    <add id="Domus_CustomerDeliveryChecker::delivery_schedule"
+         title="Delivery Schedules"
+         module="Domus_CustomerDeliveryChecker"
+         parent="Domus_CustomerDeliveryChecker::manage"
+         action="customerdeliverychecker/schedule/index"
+         sortOrder="30"
+         resource="Domus_CustomerDeliveryChecker::manage"/>
+
+    <!-- Export -->
+    <add id="Domus_CustomerDeliveryChecker::export"
+         title="Export Pincodes"
+         module="Domus_CustomerDeliveryChecker"
+         parent="Domus_CustomerDeliveryChecker::manage"
+         action="customerdeliverychecker/pincode/export"
+         sortOrder="40"
+         resource="Domus_CustomerDeliveryChecker::manage"/>
+
+</menu>
+</config>

@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
+    <group id="default">
+        <job name="domus_customerdeliverychecker_cache_warmup" instance="Domus\CustomerDeliveryChecker\Cron\CacheWarmup" method="execute">
+            <schedule>0 */2 * * *</schedule>
+        </job>
+        <job name="domus_customerdeliverychecker_index_refresh" instance="Domus\CustomerDeliveryChecker\Cron\IndexRefresh" method="execute">
+            <schedule>*/30 * * * *</schedule>
+        </job>
+        <job name="domus_customerdeliverychecker_analytics_refresh" instance="Domus\CustomerDeliveryChecker\Cron\AnalyticsRefresh" method="execute">
+            <schedule>0 1 * * *</schedule>
+        </job>
+        <job name="domus_customerdeliverychecker_data_sync" instance="Domus\CustomerDeliveryChecker\Cron\DataSync" method="execute">
+            <schedule>0 3 * * *</schedule>
+        </job>
+    </group>
+</config>

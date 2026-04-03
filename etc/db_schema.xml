@@ -1,0 +1,115 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="domus_delivery_pincode" resource="default" engine="innodb" comment="Delivery Pincode Table">
+        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>
+        <column xsi:type="varchar" name="pincode" length="10" nullable="false" comment="Pincode"/>
+        <column xsi:type="varchar" name="city" length="100" nullable="true" comment="City"/>
+        <column xsi:type="varchar" name="state" length="100" nullable="true" comment="State"/>
+        <column xsi:type="varchar" name="country" length="10" nullable="true" comment="Country Code"/>
+        <column xsi:type="smallint" name="estimated_days" nullable="true" comment="Estimated Delivery Days"/>
+        <column xsi:type="smallint" name="cod_available" nullable="false" default="1" comment="Cash on Delivery Available"/>
+        <column xsi:type="text" name="message" nullable="true" comment="Custom Message"/>
+        <column xsi:type="smallint" name="is_active" nullable="false" default="1" comment="Is Active"/>
+        <column xsi:type="varchar" name="delivery_options" length="255" nullable="true" comment="Delivery Options (standard,express,overnight)"/>
+        <column xsi:type="decimal" name="express_charge" scale="2" precision="10" nullable="true" default="0" comment="Express Delivery Charge"/>
+        <column xsi:type="decimal" name="overnight_charge" scale="2" precision="10" nullable="true" default="0" comment="Overnight Delivery Charge"/>
+        <column xsi:type="datetime" name="express_cutoff_time" nullable="true" comment="Express Delivery Cut-off Time"/>
+        <column xsi:type="decimal" name="latitude" scale="6" precision="10" nullable="true" comment="Latitude"/>
+        <column xsi:type="decimal" name="longitude" scale="6" precision="10" nullable="true" comment="Longitude"/>
+        <column xsi:type="smallint" name="is_deliverable" nullable="false" default="1" comment="Is Deliverable"/>
+        <column xsi:type="smallint" name="is_cod_available" nullable="false" default="0" comment="Is COD Available"/>
+        <column xsi:type="timestamp" name="created_at" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At"/>
+        <column xsi:type="timestamp" name="updated_at" nullable="false" default="CURRENT_TIMESTAMP" on_update="CURRENT_TIMESTAMP" comment="Updated At"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+        <constraint xsi:type="unique" referenceId="UNIQUE_PINCODE">
+            <column name="pincode"/>
+        </constraint>
+        <index referenceId="DOMUS_PINCODE_IS_ACTIVE" indexType="btree">
+            <column name="is_active"/>
+        </index>
+        <index referenceId="DOMUS_PINCODE_CITY" indexType="btree">
+            <column name="city"/>
+        </index>
+        <index referenceId="DOMUS_PINCODE_STATE" indexType="btree">
+            <column name="state"/>
+        </index>
+    </table>
+    
+    <table name="domus_delivery_pincode_category" resource="default" engine="innodb" comment="Pincode Category Relation Table">
+        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>
+        <column xsi:type="int" name="pincode_id" padding="10" unsigned="true" nullable="false" comment="Pincode ID"/>
+        <column xsi:type="int" name="category_id" padding="10" unsigned="true" nullable="false" comment="Category ID"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="DOMUS_PINCODE_CATEGORY_PINCODE_ID" table="domus_delivery_pincode_category" column="pincode_id" referenceTable="domus_delivery_pincode" referenceColumn="entity_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="DOMUS_PINCODE_CATEGORY_CATEGORY_ID" table="domus_delivery_pincode_category" column="category_id" referenceTable="catalog_category_entity" referenceColumn="entity_id" onDelete="CASCADE"/>
+        <index referenceId="DOMUS_PINCODE_CATEGORY_PINCODE_ID" indexType="btree">
+            <column name="pincode_id"/>
+        </index>
+        <index referenceId="DOMUS_PINCODE_CATEGORY_CATEGORY_ID" indexType="btree">
+            <column name="category_id"/>
+        </index>
+    </table>
+    
+    <table name="domus_delivery_analytics" resource="default" engine="innodb" comment="Delivery Analytics Table">
+        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>
+        <column xsi:type="varchar" name="pincode" length="10" nullable="false" comment="Pincode"/>
+        <column xsi:type="smallint" name="success" nullable="false" comment="Success Flag"/>
+        <column xsi:type="text" name="failure_reason" nullable="true" comment="Failure Reason"/>
+        <column xsi:type="varchar" name="ip_address" length="45" nullable="true" comment="IP Address"/>
+        <column xsi:type="varchar" name="user_agent" length="255" nullable="true" comment="User Agent"/>
+        <column xsi:type="timestamp" name="created_at" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+        <index referenceId="DOMUS_ANALYTICS_PINCODE" indexType="btree">
+            <column name="pincode"/>
+        </index>
+        <index referenceId="DOMUS_ANALYTICS_CREATED_AT" indexType="btree">
+            <column name="created_at"/>
+        </index>
+    </table>
+    
+    <table name="domus_delivery_pincode_product" resource="default" engine="innodb" comment="Pincode Product Relation Table">
+        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>
+        <column xsi:type="int" name="pincode_id" padding="10" unsigned="true" nullable="false" comment="Pincode ID"/>
+        <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" comment="Product ID"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="DOMUS_PINCODE_PRODUCT_PINCODE_ID" table="domus_delivery_pincode_product" column="pincode_id" referenceTable="domus_delivery_pincode" referenceColumn="entity_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="DOMUS_PINCODE_PRODUCT_PRODUCT_ID" table="domus_delivery_pincode_product" column="product_id" referenceTable="catalog_product_entity" referenceColumn="entity_id" onDelete="CASCADE"/>
+        <index referenceId="DOMUS_PINCODE_PRODUCT_PINCODE_ID" indexType="btree">
+            <column name="pincode_id"/>
+        </index>
+        <index referenceId="DOMUS_PINCODE_PRODUCT_PRODUCT_ID" indexType="btree">
+            <column name="product_id"/>
+        </index>
+    </table>
+    
+    <table name="domus_delivery_slots" resource="default" engine="innodb" comment="Delivery Time Slots Table">
+        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>
+        <column xsi:type="varchar" name="pincode" length="10" nullable="false" comment="Pincode"/>
+        <column xsi:type="varchar" name="day_of_week" length="20" nullable="false" comment="Day of Week"/>
+        <column xsi:type="datetime" name="time_from" nullable="false" comment="Start Time"/>
+        <column xsi:type="datetime" name="time_to" nullable="false" comment="End Time"/>
+        <column xsi:type="int" name="max_orders" nullable="true" comment="Maximum Orders"/>
+        <column xsi:type="int" name="current_orders" nullable="false" default="0" comment="Current Orders"/>
+        <column xsi:type="smallint" name="is_active" nullable="false" default="1" comment="Is Active"/>
+        <column xsi:type="timestamp" name="created_at" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At"/>
+        <column xsi:type="timestamp" name="updated_at" nullable="false" default="CURRENT_TIMESTAMP" on_update="CURRENT_TIMESTAMP" comment="Updated At"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+        <index referenceId="DOMUS_SLOTS_PINCODE" indexType="btree">
+            <column name="pincode"/>
+        </index>
+        <index referenceId="DOMUS_SLOTS_DAY" indexType="btree">
+            <column name="day_of_week"/>
+        </index>
+    </table>
+</schema>

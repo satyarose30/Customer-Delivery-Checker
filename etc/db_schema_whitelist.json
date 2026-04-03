@@ -1,0 +1,96 @@
+{
+    "domus_delivery_pincode": {
+        "column": {
+            "entity_id": true,
+            "pincode": true,
+            "country_id": true,
+            "city": true,
+            "state": true,
+            "area_name": true,
+            "latitude": true,
+            "longitude": true,
+            "is_deliverable": true,
+            "is_cod_available": true,
+            "estimated_delivery_days": true,
+            "shipping_charge": true,
+            "cod_charge": true,
+            "weight_from": true,
+            "weight_to": true,
+            "price_from": true,
+            "price_to": true,
+            "store_id": true,
+            "customer_group_id": true,
+            "priority": true,
+            "is_active": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "index": {
+            "DOMUS_DELIVERY_PINCODE_PINCODE": true,
+            "DOMUS_DELIVERY_PINCODE_COUNTRY": true,
+            "DOMUS_DELIVERY_PINCODE_ACTIVE": true,
+            "DOMUS_DELIVERY_PINCODE_DELIVERABLE": true,
+            "DOMUS_DELIVERY_PINCODE_PINCODE_COUNTRY": true,
+            "DOMUS_DELIVERY_PINCODE_STORE_ID": true,
+            "DOMUS_DELIVERY_PINCODE_CUSTOMER_GROUP": true,
+            "DOMUS_DELIVERY_PINCODE_PRIORITY": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "domus_delivery_pincode_category": {
+        "column": {
+            "entity_id": true,
+            "pincode_id": true,
+            "category_id": true
+        },
+        "index": {
+            "DOMUS_PINCODE_CAT_PINCODE_ID": true,
+            "DOMUS_PINCODE_CAT_CATEGORY_ID": true,
+            "DOMUS_PINCODE_CAT_UNIQUE": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "DOMUS_PINCODE_CAT_PINCODE_ID": true,
+            "DOMUS_PINCODE_CAT_CATEGORY_ID": true
+        }
+    },
+    "domus_delivery_pincode_product": {
+        "column": {
+            "entity_id": true,
+            "pincode_id": true,
+            "product_id": true
+        },
+        "index": {
+            "DOMUS_PINCODE_PROD_PINCODE_ID": true,
+            "DOMUS_PINCODE_PROD_PRODUCT_ID": true,
+            "DOMUS_PINCODE_PROD_UNIQUE": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "DOMUS_PINCODE_PROD_PINCODE_ID": true,
+            "DOMUS_PINCODE_PROD_PRODUCT_ID": true
+        }
+    },
+    "domus_delivery_schedule": {
+        "column": {
+            "entity_id": true,
+            "pincode_id": true,
+            "day_of_week": true,
+            "time_from": true,
+            "time_to": true,
+            "is_available": true,
+            "max_orders": true,
+            "current_orders": true
+        },
+        "index": {
+            "DOMUS_DELIVERY_SCHEDULE_PINCODE_ID": true,
+            "DOMUS_DELIVERY_SCHEDULE_DAY": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "DOMUS_DELIVERY_SCHEDULE_PINCODE_ID": true
+        }
+    }
+}
