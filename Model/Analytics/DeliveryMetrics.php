@@ -13,6 +13,9 @@ use Magento\Reports\Model\ResourceModel\Order\CollectionFactory as OrderCollecti
  */
 class DeliveryMetrics
 {
+    private const ANALYTICS_TABLE = 'domus_delivery_analytics';
+    private const EXPRESS_ANALYTICS_TABLE = 'domus_express_delivery_analytics';
+
     /**
      * @var ResourceConnection
      */
@@ -75,7 +78,10 @@ class DeliveryMetrics
     public function getTotalChecks(array $filters = []): int
     {
         $connection = $this->resourceConnection->getConnection();
-        $tableName = $this->resourceConnection->getTableName('domus_delivery_analytics');
+        $tableName = $this->resourceConnection->getTableName(self::ANALYTICS_TABLE);
+        if (!$this->tableExists($tableName)) {
+            return 0;
+        }
         
         $select = $connection->select()
             ->from($tableName, ['COUNT(*) as total'])
@@ -93,7 +99,10 @@ class DeliveryMetrics
     public function getSuccessRate(array $filters = []): float
     {
         $connection = $this->resourceConnection->getConnection();
-        $tableName = $this->resourceConnection->getTableName('domus_delivery_analytics');
+        $tableName = $this->resourceConnection->getTableName(self::ANALYTICS_TABLE);
+        if (!$this->tableExists($tableName)) {
+            return 0.0;
+        }
         
         $select = $connection->select()
             ->from($tableName, [
@@ -117,7 +126,10 @@ class DeliveryMetrics
     public function getTopPincodes(array $filters = [], int $limit = 10): array
     {
         $connection = $this->resourceConnection->getConnection();
-        $tableName = $this->resourceConnection->getTableName('domus_delivery_analytics');
+        $tableName = $this->resourceConnection->getTableName(self::ANALYTICS_TABLE);
+        if (!$this->tableExists($tableName)) {
+            return [];
+        }
         
         $select = $connection->select()
             ->from($tableName, [
@@ -142,7 +154,10 @@ class DeliveryMetrics
     public function getDeliveryTypeDistribution(array $filters = []): array
     {
         $connection = $this->resourceConnection->getConnection();
-        $tableName = $this->resourceConnection->getTableName('domus_express_delivery_analytics');
+        $tableName = $this->resourceConnection->getTableName(self::EXPRESS_ANALYTICS_TABLE);
+        if (!$this->tableExists($tableName)) {
+            return [];
+        }
         
         $select = $connection->select()
             ->from($tableName, [
@@ -165,7 +180,10 @@ class DeliveryMetrics
     public function getFailedReasons(array $filters = []): array
     {
         $connection = $this->resourceConnection->getConnection();
-        $tableName = $this->resourceConnection->getTableName('domus_delivery_analytics');
+        $tableName = $this->resourceConnection->getTableName(self::ANALYTICS_TABLE);
+        if (!$this->tableExists($tableName)) {
+            return [];
+        }
         
         $select = $connection->select()
             ->from($tableName, [
@@ -190,7 +208,10 @@ class DeliveryMetrics
     public function getPeakCheckTimes(array $filters = []): array
     {
         $connection = $this->resourceConnection->getConnection();
-        $tableName = $this->resourceConnection->getTableName('domus_delivery_analytics');
+        $tableName = $this->resourceConnection->getTableName(self::ANALYTICS_TABLE);
+        if (!$this->tableExists($tableName)) {
+            return [];
+        }
         
         $select = $connection->select()
             ->from($tableName, [
@@ -251,7 +272,10 @@ class DeliveryMetrics
     public function getExpressAdoptionRate(array $filters = []): float
     {
         $connection = $this->resourceConnection->getConnection();
-        $tableName = $this->resourceConnection->getTableName('domus_express_delivery_analytics');
+        $tableName = $this->resourceConnection->getTableName(self::EXPRESS_ANALYTICS_TABLE);
+        if (!$this->tableExists($tableName)) {
+            return 0.0;
+        }
         
         $select = $connection->select()
             ->from($tableName, [
@@ -275,13 +299,16 @@ class DeliveryMetrics
     {
         $connection = $this->resourceConnection->getConnection();
         $pincodeTable = $this->resourceConnection->getTableName('domus_delivery_pincode');
-        $analyticsTable = $this->resourceConnection->getTableName('domus_delivery_analytics');
+        $analyticsTable = $this->resourceConnection->getTableName(self::ANALYTICS_TABLE);
+        if (!$this->tableExists($pincodeTable) || !$this->tableExists($analyticsTable)) {
+            return [];
+        }
         
         $select = $connection->select()
             ->from(['p' => $pincodeTable], ['state'])
             ->joinLeft(['a' => $analyticsTable], 'p.pincode = a.pincode', [
                 'checks' => 'COUNT(a.pincode)',
-                'success_rate' => 'ROUND((SUM(CASE WHEN a.success = 1 THEN 1 ELSE 0 END) / COUNT(a.pincode)) * 100, 2)'
+                'success_rate' => 'ROUND((SUM(CASE WHEN a.success = 1 THEN 1 ELSE 0 END) / NULLIF(COUNT(a.pincode), 0)) * 100, 2)'
             ])
             ->where('a.created_at >= ?', $this->getDateFromFilter($filters))
             ->where('p.pincode IS NOT NULL')
@@ -302,5 +329,10 @@ class DeliveryMetrics
         $dateFilter = $filters['date_from'] ?? '30 days ago';
         
         return $this->dateTime->gmtDate('Y-m-d H:i:s', strtotime($dateFilter));
+    }
+
+    private function tableExists(string $tableName): bool
+    {
+        return (bool)$this->resourceConnection->getConnection()->isTableExists($tableName);
     }
 }
