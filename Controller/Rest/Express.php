@@ -101,6 +101,7 @@ class Express implements HttpGetActionInterface
             ]);
 
         } catch (\Throwable $e) {
+        } catch (\Exception $e) {
             $this->logger->error('Express options fetch failed', ['exception' => $e]);
             return $result->setData([
                 'success' => false,

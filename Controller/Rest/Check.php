@@ -113,6 +113,7 @@ class Check implements HttpGetActionInterface
             return $result->setData($responseData);
             
         } catch (\Throwable $e) {
+        } catch (\Exception $e) {
             $this->logger->error('Pincode check failed', ['exception' => $e]);
             return $result->setData([
                 'success' => false,

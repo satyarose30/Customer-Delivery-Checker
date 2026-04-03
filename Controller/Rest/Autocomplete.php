@@ -37,6 +37,7 @@ class Autocomplete extends Action
                 'items' => $searchResults->getItems()
             ]);
         } catch (\Throwable $e) {
+        } catch (\Exception $e) {
             $this->logger->error('Autocomplete API failed', ['exception' => $e]);
             return $result->setData(['success' => false, 'message' => $e->getMessage()]);
         }

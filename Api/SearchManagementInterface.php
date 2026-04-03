@@ -22,4 +22,13 @@ interface SearchManagementInterface
      * @return SearchResultInterface
      */
     public function autocomplete(string $query): SearchResultInterface;
+    public function searchPincodes($query);
+
+    /**
+     * Autocomplete helper for WebAPI route compatibility.
+     *
+     * @param string $query
+     * @return \Domus\CustomerDeliveryChecker\Api\Data\SearchResultInterface
+     */
+    public function autocomplete($query);
 }
